@@ -21,6 +21,4 @@ const StarRatingDisplay = ({ rating }: StarRatingDisplayProps) => {
   );
 };
 
-StarRatingDisplay.propTypes = {};
-
 export default StarRatingDisplay;
