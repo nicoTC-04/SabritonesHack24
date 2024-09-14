@@ -1,0 +1,38 @@
+
+.navbar {
+  background-color: var(--primary); 
+  padding: 1%;
+  padding-left: 3%;
+  padding-right: 3%;
+  position: static; 
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navItem_name {
+  display: flex; 
+  align-self: center;
+  font-weight: bold;
+}
+
+.navItem {
+  display: flex; 
+  justify-content: center; 
+  gap: 40px;
+}
+
+.navItem_profile {
+  margin-right: 20px;
+}
+
+.navLink {
+  color: var(--secondary);
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.navLink:hover {
+  color: black; 
+}
