@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Navbar from "../components/landing/navbar";
+import Searchbar from '../components/landing/searchbar';
 import "./globals.css";
 
 
@@ -30,8 +31,8 @@ export default function RootLayout({
       
       <body>
         <Navbar/>
-
-         Hello
+        <Searchbar />
+        {children}
       </body>
     </html>
   );

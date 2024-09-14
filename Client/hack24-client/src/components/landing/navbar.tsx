@@ -6,14 +6,14 @@ const Navbar: React.FC = () => {
   return (
         <nav className="navbar">
             <div className="navItem_name">
-              <Link href="/" className="navLink">Hack</Link>
+              <Link href="/" className="navLink" style={{fontSize:"25px"}}>Hack</Link>
             </div>
             <div className="navItem">
-              <Link href="/explorar" className="navLink">Explorar</Link>
-              <Link href="/misClases" className="navLink">Mis Clases</Link>
+              <Link href="/explorar" className="navLink" style={{fontSize:"15px"}}>Explorar</Link>
+              <Link href="/misClases" className="navLink" style={{fontSize:"15px"}}>Mis Clases</Link>
             </div>
             <div className="navItem_profile">
-              <Link href="/" className="navLink">Mi Perfil</Link>
+              <Link href="/" className="navLink" style={{fontSize:"20px"}}>Mi Perfil</Link>
             </div>
         </nav>
       );
