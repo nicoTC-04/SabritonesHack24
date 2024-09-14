@@ -1,0 +1,17 @@
+.star-rating-display-main-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.star-rating-display {
+  font-size: 1.25vw;
+  color: #ccc;
+}
+
+.filled {
+  fill: #ffcc00;
+}
