@@ -34,6 +34,7 @@ export default function MisClases() {
   const [pastClasses, setPastClasses] = useState<Nico[]>([]);
 
   // Pre-class modal states
+  const [modalClassId, setModalClassId] = useState<number | null>(null); // Added class_id
   const [modalClassName, setModalClassName] = useState("");
   const [modalProfessorName, setModalProfessorName] = useState("");
   const [modalFecha, setModalFecha] = useState("");
@@ -69,8 +70,9 @@ export default function MisClases() {
     fetchClasses();
   }, []);
 
-  const onClassClick = ({ course_name, teacher_name, timestamp, meeting_id }: Nico) => {
+  const onClassClick = ({ class_id, course_name, teacher_name, timestamp, meeting_id }: Nico) => {
     // Pre-class
+    setModalClassId(class_id); // Set class_id
     setModalClassName(course_name);
     setModalProfessorName(teacher_name); // Use teacher_name
     setModalFecha(timestamp);
@@ -78,8 +80,9 @@ export default function MisClases() {
     setOpenModal(true);
   };
 
-  const onPastClassClick = ({ course_name, teacher_name, timestamp, path_video, summary }: Nico) => {
+  const onPastClassClick = ({ class_id, course_name, teacher_name, timestamp, path_video, summary }: Nico) => {
     // Post-class
+    setModalClassId(class_id); // Set class_id
     setModalClassName(course_name);
     setModalProfessorName(teacher_name); // Use teacher_name
     setModalFecha(timestamp);
@@ -115,6 +118,7 @@ export default function MisClases() {
           {openModal && (
             <ModalClass
               toggleModal={toggleModalHandler}
+              classId={modalClassId} // Pass class_id
               meetingId={modalMeetingId}
               nombre={modalClassName}
               professor={modalProfessorName}
@@ -140,6 +144,7 @@ export default function MisClases() {
           {openPostModal && (
             <PostClassModal
               toggleModal={togglePostModalHandler}
+              classId={modalClassId} // Pass class_id
               videoUrl={postClassVideoUrl}
               nombre={modalClassName}
               professor={modalProfessorName}

@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 
 type ModalClassProps = {
     toggleModal: Function;
+    classId: number | null; // Add classId to props
     meetingId: string;
     nombre: string;
     professor: string;
@@ -14,6 +15,7 @@ type ModalClassProps = {
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://216.238.66.189:5000';
 
 const ModalClass = ({
+    classId, // Include classId in destructuring
     nombre, 
     professor, 
     date, 
