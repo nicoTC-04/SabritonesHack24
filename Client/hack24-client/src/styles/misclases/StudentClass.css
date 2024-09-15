@@ -1,6 +1,7 @@
 .student-class-card {
     display: flex;
-    margin: 4vw;
+    margin: 2vw;
+    margin-left: 5vw;
     padding: 1.2vw;
     flex-direction: column;
     border-radius: 0.5vw;
