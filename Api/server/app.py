@@ -7,7 +7,7 @@ from google.cloud import speech # google cloud speech-to-text
 from google.oauth2 import service_account # for authenticating with google cloud
 import google.generativeai as genai
 import uuid # for generating unique meeting IDs
-import sys # for system-level operations 
+import sys # for system-level operations
 import os # for file operations
 import io # for file operations
 import psycopg2
@@ -71,7 +71,7 @@ def create_meeting():
     Debugger.log_message('INFO', f'User {username} created a new meeting with ID: {meeting_id}')
     print(f"Meeting created: {meeting_id}")
     print(f"Current session storage: {session_storage}")
-    
+
     return jsonify({'meeting_id': meeting_id})
 
 @app.route('/api/session/<meeting_id>', methods=['GET'])
@@ -88,7 +88,7 @@ def get_users(meeting_id):
         return jsonify({'error': 'Meeting ID not found'}), 404
     if len(session_storage[meeting_id]['users']) > 7:
         return jsonify({'error': 'Meeting is full'}), 404
-    
+
     return jsonify(list(session_storage[meeting_id]['users'].keys()))
 
 
@@ -128,20 +128,20 @@ def handle_disconnect():
 
     # for meeting_id in to_delete:
     #     del session_storage[meeting_id]
-        
-        
-        
 
 
 
-        
+
+
+
+
 def summarize_text(transcript):
     text = transcript
 
     if not text:
         return jsonify({'error':'Text is required'})
 
-    try:        
+    try:
         genai.configure(api_key=api_key)
         model = genai.GenerativeModel(model_name)
 
@@ -155,14 +155,14 @@ def summarize_text(transcript):
     except Exception as e:
         return "Error: " + str(e)
 
-        
+
 def transcribe_audio(file_path):
     # Path to your service account key file
     credentials_path = os.path.join(os.path.dirname(__file__), 'hack24palestra-8ae7da29e71c.json')
-    
+
     # Load the credentials
     credentials = service_account.Credentials.from_service_account_file(credentials_path)
-    
+
     # Initialize the Google Cloud Speech client with the explicit credentials
     client = speech.SpeechClient(credentials=credentials)
 
@@ -188,7 +188,7 @@ def transcribe_audio(file_path):
 
     return transcription
 
-    
+
 def convert_webm_to_mp3(input_file, output_file, timestamp):
     try:
         # Normalize the file paths to use forward slashes and ensure drive letters are properly formatted
@@ -330,11 +330,15 @@ def register():
 def get_courses():
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
+
+    # Modified query to include category_id and category_name from Categories table
     query = sql.SQL("""
-        SELECT c.course_id, c.name, c.level, c.pathToPic, t.user_id, t.rating
+        SELECT c.course_id, c.name, c.level, c.pathToPic, t.user_id, t.rating, cat.category_id, cat.name as category_name
         FROM my_schema.Courses c
         LEFT JOIN my_schema.Teachers t ON c.teacher_id = t.user_id
+        LEFT JOIN my_schema.Categories cat ON c.category_id = cat.category_id
     """)
+
     cursor.execute(query)
     courses = cursor.fetchall()
 
