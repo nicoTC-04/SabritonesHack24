@@ -158,7 +158,7 @@ def summarize_text(transcript):
 
 def transcribe_audio(file_path):
     # Path to your service account key file
-    credentials_path = os.path.join(os.path.dirname(__file__), 'hack24palestra-8ae7da29e71c.json')
+    credentials_path = os.path.join(os.path.dirname(__file__), '/../../../hack24palestra-8ae7da29e71c.json')
 
     # Load the credentials
     credentials = service_account.Credentials.from_service_account_file(credentials_path)
@@ -272,7 +272,7 @@ def upload_file():
                 SELECT id FROM my_schema.Classes WHERE meeting_id = %s
             """), (meeting_id,))
             class_record = cursor.fetchone()
-            
+
             # If class is not found, return an error
             if not class_record:
                 cursor.close()
@@ -431,7 +431,6 @@ def get_categories():
 
     return jsonify(categories)
 
-
 @app.route('/makeAppointment', methods=['POST'])
 def make_appointment():
     data = request.json
@@ -440,7 +439,7 @@ def make_appointment():
 
     conn = get_db_connection()
     cursor = conn.cursor()
-    
+
     try:
         # Generate a unique meeting ID using uuid
         meeting_id = str(uuid.uuid4())
@@ -456,19 +455,19 @@ def make_appointment():
         # Update the appointment in the Appointments table
         cursor.execute(sql.SQL("""
             UPDATE my_schema.Appointments
-            SET status = 'Reserved', 
+            SET status = 'Reserved',
                 timestamp = NOW()
             WHERE teacher_id = (
-                SELECT teacher_id 
-                FROM my_schema.Courses 
+                SELECT teacher_id
+                FROM my_schema.Courses
                 WHERE course_id = %s
             ) AND status != 'Reserved' -- Optional condition to avoid updating already reserved appointments
         """), (course_id,))
-        
+
         # Check if the appointment was actually updated
         if cursor.rowcount == 0:
             return jsonify({'error': 'No matching appointment found to update'}), 404
-        
+
         conn.commit()
 
         # Insert into the Classes table
@@ -490,7 +489,6 @@ def make_appointment():
 
 
 
-
 # Get Classes endpoint
 @app.route('/getClasses', methods=['GET'])
 def get_classes():
@@ -499,9 +497,9 @@ def get_classes():
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     query = sql.SQL("""
-        SELECT 
-            c.id AS class_id, 
-            c.course_id, 
+        SELECT
+            c.id AS class_id,
+            c.course_id,
             crs.name AS course_name,
             crs.level,
             crs.pathToPic AS pathtopic,
@@ -511,7 +509,7 @@ def get_classes():
             usr.region AS teacher_region,
             usr.timezone AS teacher_timezone,
             t.rating AS teacher_rating,
-            c.student_id, 
+            c.student_id,
             TO_CHAR(c.timestamp, 'YYYY-MM-DD HH24:MI:SS') AS timestamp,
             -- Convert duration (assuming it is stored as an interval)
             CASE
@@ -522,7 +520,7 @@ def get_classes():
                 ELSE
                     EXTRACT(SECOND FROM c.duration)::text || ' second(s)'
             END AS duration,
-            c.path_video, 
+            c.path_video,
             c.summary,
             c.meeting_id
         FROM my_schema.Classes c
@@ -538,9 +536,9 @@ def get_classes():
 
     cursor.execute(query, (user_id,))
     classes = cursor.fetchall()
-    
+
     Debugger.log_message('DEBUG', f'Classes: {classes}')
-    
+
     cursor.close()
     conn.close()
 
@@ -565,28 +563,28 @@ def get_video():
             WHERE id = %s
         """), (class_id,))
         result = cursor.fetchone()
-        
+
         if not result or not result[0] or result[0].strip() == "":
             return jsonify({'error': 'Video not found or path is empty for this class'}), 404
-        
+
         # Construct the file path
         video_path = os.path.join(UPLOAD_FOLDER, result[0])
-        
+
         if not os.path.exists(video_path):
             return jsonify({'error': 'Video file does not exist on the server'}), 404
 
         # Send the video file
         return send_file(video_path, as_attachment=True)
-    
+
     except psycopg2.Error as e:
         Debugger.log_message('ERROR', f"Failed to fetch video: {str(e)}")
         return jsonify({'error': 'Failed to retrieve video'}), 500
-    
+
     finally:
         cursor.close()
         conn.close()
 
-    
+
 
 
 
