@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Navbar from "../components/landing/navbar";
+import StudentClass from "@/components/misclases/StudentClass"; // Import the StudentClass component
 import "./globals.css";
-
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,12 +25,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Define the student data
+  const studentData = {
+    name: "Mathematics 101",
+    professor: "Dr. John Doe",
+    fecha: "mañana",
+    hora: "2:15",
+  };
+
   return (
     <html lang="en">
-      
       <body>
-        <Navbar/>
-         {children}
+        <Navbar />
+        <StudentClass student={studentData} />
+        {children}
       </body>
     </html>
   );

@@ -1,7 +1,15 @@
 'use client'
 
+import '@/components/misclases/StudentClass'
+import StudentClass from '@/components/misclases/StudentClass'
+
 export default function Clase() {
   return (
-    <div>Clase</div>
+    <body>
+      <div>
+        
+      </div>
+    </body>
+
   )
 }
