@@ -25,7 +25,7 @@ const RatingCard = ({ review }: ReviewCardProps) => {
       <div className="rating-card-image-main-container">
         <div className="rating-card-image-container">
           <img
-            src={review.image}
+            src={"/" + review.image}
             className="rating-card-image"
             onError={imageRatingErrorHandler}
           />

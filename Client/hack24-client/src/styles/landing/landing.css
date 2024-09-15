@@ -149,18 +149,34 @@
 
   .footerLanding{
     height: 35vh;
-    width: 80vw;
-    margin-left: 10vw;
+    width: 100vw;
     margin-top: 15vh;
-    margin-bottom: 15vh;
-    border-radius: 0.8vw;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    font-size: 2rem;
-    background-color: var(--accent);
+    background-color: var(--primary);
     font-weight: bold;
     color: white;
     font-style: italic;
+}
+.footerLanding h3{
+  font-size: 1.5rem;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+.footerLanding h2{
+  font-size: 2rem;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+
+.footerBtn{
+  margin-top: 2rem;
+  font-weight: bold;
+  background-color: var(--accent);
+  color: var(--primary);
+  border: none;
+  padding: 1rem;
+  font-size: 1rem;
+  border-radius: 10px;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 }

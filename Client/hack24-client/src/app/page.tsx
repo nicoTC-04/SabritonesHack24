@@ -162,26 +162,26 @@ export default function Home() {
         <div className="testimonialContainer">
           <RatingCard
             review={{
-              name: "John Doe",
+              name: "Carlos Mtz",
               score: 5,
-              review: "Excelente profesor, muy recomendado.",
-              image: "stat",
+              review: "Carlos Mtz es un profesor de matemáticas con un método claro y eficaz. Sus explicaciones concisas y su disposición para resolver dudas de manera rápida hacen que sus clases sean muy útiles y productivas.",
+              image: "carlos.jpeg",
             }}
           />
           <RatingCard
             review={{
-              name: "Jane Doe",
+              name: "German Salas",
               score: 4,
-              review: "Buen profesor, muy paciente.",
-              image: "stat",
+              review: "Germán Salas es un profesor de literatura apasionado que ofrece análisis profundos de los textos. Su entusiasmo y capacidad para motivar a los estudiantes enriquecen la experiencia educativa.",
+              image: "german.jpeg",
             }}
           />
           <RatingCard
             review={{
-              name: "John Smith",
+              name: "Emilio Dominguez",
               score: 3,
-              review: "Regular profesor, se puede mejorar.",
-              image: "stat",
+              review: "Emilio Dominguez es un excelente profesor de ciencias sociales. Su enfoque dinámico y su habilidad para conectar los temas con ejemplos actuales mantienen a los estudiantes interesados y participativos en clase.",
+              image: "emi.jpeg",
             }}
           />
         </div>
@@ -240,6 +240,7 @@ export default function Home() {
       <div className="footerLanding">
         <h3>Se parte del siguiente paso en la</h3>
         <h2>Evolución Educativa</h2>
+        <button className="footerBtn">Registrate como maestro</button>
       </div>
     </div>
   );

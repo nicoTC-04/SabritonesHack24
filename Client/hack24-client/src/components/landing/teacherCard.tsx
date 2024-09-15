@@ -2,6 +2,7 @@
 
 import "@/styles/landing/teacherCard.css";
 import StarRatingDisplay from "./StarRatingDisplay";
+import Image from "next/image";
 
 interface Appointment {
   appointment_id: number;
@@ -36,8 +37,9 @@ const CourseCard = ({ course }: CourseCardProps) => {
   return (
     <div className="teacher-card-main-container">
       <div className="teacher-card-image-container">
-        <img
-          src={course.pathtopic}
+        <Image
+          src={"/" + course.pathtopic}
+          fill
           className="teacher-card-image"
           onError={imageCourseErrorHandler}
         />
