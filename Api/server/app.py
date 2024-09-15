@@ -426,11 +426,25 @@ def get_classes():
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     query = sql.SQL("""
-        SELECT course_id, student_id, TO_CHAR(timestamp, 'YYYY-MM-DD HH24:MI:SS') as timestamp,
-            duration, path_video, summary
+        SELECT 
+            course_id, 
+            student_id, 
+            TO_CHAR(timestamp, 'YYYY-MM-DD HH24:MI:SS') AS timestamp,
+            -- Convert duration (assuming it is stored as an interval)
+            CASE
+                WHEN EXTRACT(HOUR FROM duration) > 0 THEN
+                    EXTRACT(HOUR FROM duration)::text || ' hour(s)'
+                WHEN EXTRACT(MINUTE FROM duration) > 0 THEN
+                    EXTRACT(MINUTE FROM duration)::text || ' minute(s)'
+                ELSE
+                    EXTRACT(SECOND FROM duration)::text || ' second(s)'
+            END AS duration,
+            path_video, 
+            summary
         FROM my_schema.Classes
         WHERE student_id = %s
     """)
+
 
     cursor.execute(query, (user_id,))
     classes = cursor.fetchall()
