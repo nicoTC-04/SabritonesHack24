@@ -431,8 +431,13 @@ def get_classes():
             c.course_id, 
             crs.name AS course_name,
             crs.level,
-            crs.pathToPic,
+            crs.pathToPic AS pathtopic,
             crs.description AS course_description,
+            cat.name AS category_name,
+            usr.name AS teacher_name,
+            usr.region AS teacher_region,
+            usr.timezone AS teacher_timezone,
+            t.rating AS teacher_rating,
             c.student_id, 
             TO_CHAR(c.timestamp, 'YYYY-MM-DD HH24:MI:SS') AS timestamp,
             -- Convert duration (assuming it is stored as an interval)
@@ -449,8 +454,12 @@ def get_classes():
             c.meeting_id
         FROM my_schema.Classes c
         JOIN my_schema.Courses crs ON c.course_id = crs.course_id
+        JOIN my_schema.Teachers t ON crs.teacher_id = t.user_id
+        JOIN my_schema.Users usr ON t.user_id = usr.id
+        JOIN my_schema.Categories cat ON crs.category_id = cat.id
         WHERE c.student_id = %s
     """)
+
 
 
 
