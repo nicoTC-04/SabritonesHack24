@@ -426,9 +426,12 @@ def get_classes():
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     query = sql.SQL("""
-        SELECT * FROM my_schema.Classes
+        SELECT course_id, student_id, TO_CHAR(timestamp, 'YYYY-MM-DD HH24:MI:SS') as timestamp,
+            duration, path_video, summary
+        FROM my_schema.Classes
         WHERE student_id = %s
     """)
+
     cursor.execute(query, (user_id,))
     classes = cursor.fetchall()
     cursor.close()
