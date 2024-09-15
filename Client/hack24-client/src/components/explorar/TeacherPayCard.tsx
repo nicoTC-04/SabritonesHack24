@@ -11,6 +11,7 @@ type TeacherPayCardProps = {
   category: string;
   grade: string;
   price: number;
+  professorName: string;
   toggleModal: Function;
 };
 
@@ -22,6 +23,7 @@ const TeacherPayCard = ({
   category,
   grade,
   price,
+  professorName,
   toggleModal,
 }: TeacherPayCardProps) => {
   const imagePayErrorHandler = (
@@ -33,10 +35,10 @@ const TeacherPayCard = ({
 
   const toggleModalHandler = () => {
     toggleModal({
-      name: category,
+      name,
       description,
       price,
-      professorName: name,
+      professorName,
     });
   };
 

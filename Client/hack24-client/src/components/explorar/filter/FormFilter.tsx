@@ -4,27 +4,20 @@ import { useState, useEffect } from "react";
 import FilterSelect from "./FilterSelect";
 import "@/styles/explorar/FormFilter.css";
 
-const categorias = [
-  "Matematicas",
-  "Fisica",
-  "Quimica",
-  "Biologia",
-  "Historia",
-  "Geografia",
-  "Español",
-];
+type FormFilterProps = {
+  categories: string[];
+  grades: string[];
+  onSubmitFilters: Function;
+};
 
-const grados = ["Primaria", "Secundaria", "Preparatoria", "Profesional"];
-
-const FormFilter = () => {
+const FormFilter = ({ categories, grades, onSubmitFilters }: FormFilterProps) => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedGrades, setSelectedGrades] = useState<string[]>([]);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // LOGICA DE REQUEST CON FILTRO ACTUALIZAR ESTADO DE TEACHERS
-    console.log(selectedCategories, selectedGrades);
-  }
+    onSubmitFilters(selectedCategories, selectedGrades);
+  };
 
   return (
     <form className="form-filter-main-container" onSubmit={submitHandler}>
@@ -35,13 +28,13 @@ const FormFilter = () => {
         <FilterSelect
           name="Categoria"
           selectedArray={selectedCategories}
-          optionsArray={categorias}
+          optionsArray={categories}
           setSelectedArray={setSelectedCategories}
         />
         <FilterSelect
           name="Grados"
           selectedArray={selectedGrades}
-          optionsArray={grados}
+          optionsArray={grades}
           setSelectedArray={setSelectedGrades}
         />
       </div>
