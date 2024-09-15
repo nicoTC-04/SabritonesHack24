@@ -13,6 +13,7 @@ interface Course {
   pathtopic: string;
   rating: string;
   user_id: number;
+  category_name: string; // Added category_name
 }
 
 export default function Home() {
@@ -51,6 +52,12 @@ export default function Home() {
     }
   };
 
+  // Filtered courses by category
+  const mathCourses = courses.filter((course) => course.category_name === "Matemáticas");
+  const englishCourses = courses.filter((course) => course.category_name === "Español");
+  const historyCourses = courses.filter((course) => course.category_name === "Historia");
+  const programmingCourses = courses.filter((course) => course.category_name === "Computación");
+
   return (
     <div>
       <div className="Banner">
@@ -61,18 +68,16 @@ export default function Home() {
       </div>
 
       <div>
-
         <div>
-          <div className="leftContainer" >
-            <h3>Matematicas</h3>
-
+          <div className="leftContainer">
+            <h3>Matemáticas</h3>
           </div>
           <div className="carousel-container">
             <button className="carousel-button left" onClick={() => scrollLeft(mathCarouselRef)}>
               &#9664;
             </button>
             <div className="carousel" ref={mathCarouselRef}>
-              {courses.map((course) => (
+              {mathCourses.map((course) => (
                 <TeacherCard key={course.course_id} course={course} />
               ))}
             </div>
@@ -83,16 +88,15 @@ export default function Home() {
         </div>
 
         <div>
-        <div className="leftContainer" >
-          <h3>Ingles</h3>
-
+          <div className="leftContainer">
+            <h3>Español</h3>
           </div>
           <div className="carousel-container">
             <button className="carousel-button left" onClick={() => scrollLeft(englishCarouselRef)}>
               &#9664;
             </button>
             <div className="carousel" ref={englishCarouselRef}>
-              {courses.map((course) => (
+              {englishCourses.map((course) => (
                 <TeacherCard key={course.course_id} course={course} />
               ))}
             </div>
@@ -134,17 +138,15 @@ export default function Home() {
         </div>
 
         <div>
-        <div className="leftContainer" >
-        <h3>Historia</h3>
-
+          <div className="leftContainer">
+            <h3>Historia</h3>
           </div>
-
           <div className="carousel-container">
             <button className="carousel-button left" onClick={() => scrollLeft(historyCarouselRef)}>
               &#9664;
             </button>
             <div className="carousel" ref={historyCarouselRef}>
-              {courses.map((course) => (
+              {historyCourses.map((course) => (
                 <TeacherCard key={course.course_id} course={course} />
               ))}
             </div>
@@ -155,16 +157,15 @@ export default function Home() {
         </div>
 
         <div>
-        <div className="leftContainer" >
-        <h3>Programacion</h3>
-
+          <div className="leftContainer">
+            <h3>Programación</h3>
           </div>
           <div className="carousel-container">
             <button className="carousel-button left" onClick={() => scrollLeft(programmingCarouselRef)}>
               &#9664;
             </button>
             <div className="carousel" ref={programmingCarouselRef}>
-              {courses.map((course) => (
+              {programmingCourses.map((course) => (
                 <TeacherCard key={course.course_id} course={course} />
               ))}
             </div>
@@ -173,15 +174,12 @@ export default function Home() {
             </button>
           </div>
         </div>
-
-
       </div>
 
       <div className="footerLanding">
-          <h3>Se parte del siguente paso en la </h3>
-          <h2>Evolucion Educativa</h2>
+        <h3>Se parte del siguiente paso en la</h3>
+        <h2>Evolución Educativa</h2>
       </div>
-
     </div>
   );
 }
