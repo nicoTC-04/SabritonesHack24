@@ -8,8 +8,6 @@ import "@/styles/explorar/Explorar.css";
 import axios from "axios";
 import { API_BASE_URL } from "../constants";
 
-const description =
-  "Ofrezco material al alumno para que aprenda de una manera eficiente y podamos tener un buen vinculo alumno maestro";
 
 const grados = ["Avanzado", "Intermedio", "Principiante"];
 

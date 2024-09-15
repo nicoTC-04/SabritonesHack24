@@ -4,8 +4,9 @@
   justify-content: flex-start;
   align-items: center;
   width: 20vw;
-  height: 40vh;
+  height: 50vh;
   border-radius: 1vw;
+  background-color: var(--teacher-image-background-default);
   box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.2);
 }
 
@@ -86,6 +87,8 @@
 
 .teacher-pay-description-container {
   width: 100%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   padding-right: 1vw;
 }
 
@@ -141,7 +144,7 @@
 
 .teacher-pay-button {
   width: 60%;
-  background-color: lightgray;
+  background-color: var(--accent);
   height: 80%;
   border-radius: 1vw;
   font-weight: bold;

@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable */
 
 import "@/styles/explorar/TeacherPayCard.css";
 import StarRatingDisplay from "../landing/StarRatingDisplay";

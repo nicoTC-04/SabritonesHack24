@@ -5,6 +5,7 @@
   height: auto;
   border-radius: 0.5vw;
   box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.2);
+  background-color: var(--teacher-image-background-default);
   margin: 1rem 0; /* Add some margin for spacing */
 }
 
