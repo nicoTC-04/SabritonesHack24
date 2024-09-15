@@ -418,42 +418,29 @@ def make_appointment():
         conn.close()
         return jsonify({'error': str(e)}), 500
 
-
 # Get Classes endpoint
 @app.route('/getClasses', methods=['GET'])
 def get_classes():
     user_id = request.args.get('user_id')
 
-    if not user_id:
-        return jsonify({"error": "user_id is required"}), 400
+    conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    query = sql.SQL("""
+        SELECT course_id, student_id, TO_CHAR(timestamp, 'YYYY-MM-DD HH24:MI:SS') as timestamp,
+            duration, path_video, summary
+        FROM my_schema.Classes
+        WHERE student_id = %s
+    """)
 
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor(cursor_factory=RealDictCursor)
-        query = sql.SQL("""
-            SELECT * FROM my_schema.Classes
-            WHERE student_id = %s
-        """)
-        cursor.execute(query, (user_id,))
-        classes = cursor.fetchall()
-
-        # Convert datetime objects to strings
-        for cls in classes:
-            if isinstance(cls['timestamp'], datetime):
-                cls['timestamp'] = cls['timestamp'].strftime('%Y-%m-%d %H:%M:%S')
-
-    except DatabaseError as e:
-        # Handle database-related errors
-        return jsonify({"error": str(e)}), 500
-    finally:
-        # Ensure resources are properly cleaned up
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
+    cursor.execute(query, (user_id,))
+    classes = cursor.fetchall()
+    
+    Debugger.log_message('DEBUG', f'Classes: {classes}')
+    
+    cursor.close()
+    conn.close()
 
     return jsonify(classes)
-
 
 
 
