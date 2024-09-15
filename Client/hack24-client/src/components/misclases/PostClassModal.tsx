@@ -1,8 +1,11 @@
+import { useState, useEffect } from 'react';
 import { Modal } from "../Modal";
 import '@/styles/misclases/PostClassModal.css';
+import toast from 'react-hot-toast';
 
 type PostClassModalProps = {
     toggleModal: Function;
+    classId: number | null; // Add classId to props
     videoUrl: string;
     nombre: string;
     professor: string;
@@ -10,7 +13,10 @@ type PostClassModalProps = {
     description: string;
 };
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://216.238.66.189:5000';
+
 const PostClassModal = ({
+    classId, // Include classId in destructuring
     nombre, 
     professor, 
     date, 
@@ -18,6 +24,37 @@ const PostClassModal = ({
     description, 
     toggleModal 
 }: PostClassModalProps) => {
+    const [fetchedVideoUrl, setFetchedVideoUrl] = useState<string>(videoUrl);
+    const [fetchedSummary, setFetchedSummary] = useState<string>(description);
+
+    // Fetch video and summary when the modal opens
+    useEffect(() => {
+        if (classId) {
+            const fetchVideoAndSummary = async () => {
+                try {
+                    const response = await fetch(`${apiUrl}/getVideo?class_id=${classId}`);
+                    
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch video and summary');
+                    }
+
+                    // Assuming the backend is sending the summary in the response header
+                    const videoBlob = await response.blob();
+                    const videoUrl = URL.createObjectURL(videoBlob);
+                    const summary = response.headers.get('summary') || 'No summary available';
+
+                    setFetchedVideoUrl(videoUrl);
+                    setFetchedSummary(summary);
+                } catch (error) {
+                    console.error('Error fetching video and summary:', error);
+                    toast.error('Failed to load video and summary');
+                }
+            };
+
+            fetchVideoAndSummary();
+        }
+    }, [classId]);
+
     const imageModalProfesorErrorHandler = (
         event: React.SyntheticEvent<HTMLImageElement>
     ) => {
@@ -50,12 +87,12 @@ const PostClassModal = ({
                 </div>
                 <div className="modal-class-post-video">
                     <video controls>
-                        <source src={videoUrl} type="video/mp4" />
+                        <source src={fetchedVideoUrl} type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
                 </div>
                 <div className="modal-class-post-description">
-                    <p>{description}</p>
+                    <p>{fetchedSummary}</p>
                 </div>
             </div>
         </Modal>
