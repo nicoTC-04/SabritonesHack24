@@ -330,11 +330,21 @@ def register():
 def get_courses():
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
+
+    # Query to get course details along with teacher's info
     query = sql.SQL("""
-        SELECT c.course_id, c.name, c.level, c.pathToPic, c.category_id, cat.name AS category_name, t.user_id, t.rating
+        SELECT
+            c.course_id,
+            c.name AS course_name,
+            c.level,
+            c.pathToPic,
+            c.description AS course_description,
+            t.user_id AS teacher_id,
+            t.rating AS teacher_rating,
+            u.name AS teacher_name
         FROM my_schema.Courses c
         LEFT JOIN my_schema.Teachers t ON c.teacher_id = t.user_id
-        LEFT JOIN my_schema.Categories cat ON c.category_id = cat.id
+        LEFT JOIN my_schema.Users u ON t.user_id = u.id
     """)
     cursor.execute(query)
     courses = cursor.fetchall()
@@ -342,11 +352,18 @@ def get_courses():
     # Get appointments for each course
     for course in courses:
         course_id = course['course_id']
+
+        # Query to get all appointments for the teacher of the current course
         cursor.execute(sql.SQL("""
-            SELECT id FROM my_schema.Appointments WHERE teacher_id = %s
-        """), (course['user_id'],))
+            SELECT
+                a.id AS appointment_id,
+                a.status,
+                a.timestamp AS appointment_timestamp
+            FROM my_schema.Appointments a
+            WHERE a.teacher_id = %s
+        """), (course['teacher_id'],))
         appointments = cursor.fetchall()
-        course['appointments'] = [appt['id'] for appt in appointments]
+        course['appointments'] = appointments
 
     cursor.close()
     conn.close()
