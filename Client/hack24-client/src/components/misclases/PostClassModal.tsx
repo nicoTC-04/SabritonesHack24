@@ -32,19 +32,28 @@ const PostClassModal = ({
         if (classId) {
             const fetchVideoAndSummary = async () => {
                 try {
-                    const response = await fetch(`${apiUrl}/getVideo?class_id=${classId}`);
+                    // Fetch the video
+                    const videoResponse = await fetch(`${apiUrl}/getVideo?class_id=${classId}`);
                     
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch video and summary');
+                    if (!videoResponse.ok) {
+                        throw new Error('Failed to fetch video');
                     }
 
-                    // Assuming the backend is sending the summary in the response header
-                    const videoBlob = await response.blob();
+                    const videoBlob = await videoResponse.blob();
                     const videoUrl = URL.createObjectURL(videoBlob);
-                    const summary = response.headers.get('summary') || 'No summary available';
-
                     setFetchedVideoUrl(videoUrl);
+
+                    // Fetch the summary
+                    const summaryResponse = await fetch(`${apiUrl}/getSummary?class_id=${classId}`);
+
+                    if (!summaryResponse.ok) {
+                        throw new Error('Failed to fetch summary');
+                    }
+
+                    const summaryData = await summaryResponse.json();
+                    const summary = summaryData.summary || 'No summary available';
                     setFetchedSummary(summary);
+
                 } catch (error) {
                     console.error('Error fetching video and summary:', error);
                     toast.error('Failed to load video and summary');
@@ -87,7 +96,7 @@ const PostClassModal = ({
                 </div>
                 <div className="modal-class-post-video">
                     <video controls>
-                        <source src={fetchedVideoUrl} type="video/mp4" />
+                        <source src={fetchedVideoUrl} type="video/webm" />
                         Your browser does not support the video tag.
                     </video>
                 </div>
