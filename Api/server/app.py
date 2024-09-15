@@ -278,7 +278,7 @@ def login():
     conn = get_db_connection()
     cursor = conn.cursor()
     query = sql.SQL("""
-        SELECT name, region, teacher, timezone
+        SELECT id, name, region, teacher, timezone
         FROM my_schema.Users
         WHERE username = %s AND password = %s
     """)
@@ -289,10 +289,11 @@ def login():
 
     if user:
         return jsonify({
-            'name': user[0],
-            'region': user[1],
-            'teacher': user[2],
-            'timezone': user[3]
+            'id': user[0],
+            'name': user[1],
+            'region': user[2],
+            'teacher': user[3],
+            'timezone': user[4]
         })
     else:
         return jsonify({'error': 'Invalid username or password'}), 401
