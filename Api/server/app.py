@@ -331,7 +331,7 @@ def get_courses():
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
 
-    # Query to get course details along with teacher's info
+    # Query to get course details along with teacher's info and category_id
     query = sql.SQL("""
         SELECT
             c.course_id,
@@ -339,6 +339,7 @@ def get_courses():
             c.level,
             c.pathToPic,
             c.description AS course_description,
+            c.category_id AS category_id,  -- Include category_id
             t.user_id AS teacher_id,
             t.rating AS teacher_rating,
             u.name AS teacher_name
@@ -369,7 +370,6 @@ def get_courses():
     conn.close()
 
     return jsonify(courses)
-
 # Get Categories endpoint
 @app.route('/getCategories', methods=['GET'])
 def get_categories():
