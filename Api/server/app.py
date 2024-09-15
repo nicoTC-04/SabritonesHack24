@@ -330,15 +330,12 @@ def register():
 def get_courses():
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
-
-    # Modified query to include category_id and category_name from Categories table
     query = sql.SQL("""
-        SELECT c.course_id, c.name, c.level, c.pathToPic, t.user_id, t.rating, cat.category_id, cat.name as category_name
+        SELECT c.course_id, c.name, c.level, c.pathToPic, c.category_id, cat.name AS category_name, t.user_id, t.rating
         FROM my_schema.Courses c
         LEFT JOIN my_schema.Teachers t ON c.teacher_id = t.user_id
-        LEFT JOIN my_schema.Categories cat ON c.category_id = cat.category_id
+        LEFT JOIN my_schema.Categories cat ON c.category_id = cat.id
     """)
-
     cursor.execute(query)
     courses = cursor.fetchall()
 
