@@ -1,24 +1,29 @@
 .teacher-card-main-container {
   display: flex;
   flex-direction: column;
-  width: 23vw;
-  height: 28vh;
+  width: 90vw; /* Default to full width on small screens */
+  height: auto;
   border-radius: 0.5vw;
   box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.2);
+  margin: 1rem 0; /* Add some margin for spacing */
 }
 
 .teacher-card-image-container {
   display: flex;
   width: 100%;
-  height: 55%;
+  padding-top: 56.25%; /* 16:9 aspect ratio */
+  position: relative;
   background-color: var(--teacher-image-background-default);
   border-radius: 0.5vw 0.5vw 0 0;
 }
 
 .teacher-card-image {
-  object-fit: contain;
+  object-fit: cover;
   width: 100%;
   height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
   border-radius: 0.5vw 0.5vw 0 0;
 }
 
@@ -26,8 +31,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 45%;
-  padding: 0.5vw;
+  padding: 1rem;
   border-radius: 0 0 0.5vw 0.5vw;
 }
 
@@ -36,11 +40,11 @@
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  height: 30%;
+  margin-bottom: 0.5rem;
 }
 
 .teacher-card-name {
-  font-size: 1.5vw;
+  font-size: 4vw; /* Responsive font size */
   font-weight: bold;
 }
 
@@ -48,14 +52,12 @@
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 70%;
 }
 
 .teacher-card-details-container {
   display: flex;
   flex-direction: column;
   width: 70%;
-  height: 100%;
   justify-content: center;
 }
 
@@ -64,29 +66,85 @@
   flex-direction: row;
   align-items: center;
   width: 100%;
-  height: 35%;
   gap: 0.5vw;
   padding-left: 1vw;
 }
 
 .teacher-card-details-text-label {
-  font-size: 0.85vw;
+  font-size: 3vw; /* Responsive font size */
   font-weight: bold;
 }
 
 .teacher-card-details-text-value {
-  font-size: 0.85vw;
+  font-size: 3vw; /* Responsive font size */
 }
 
 .teacher-card-score-container {
   display: flex;
   width: 30%;
-  height: 100%;
   justify-content: center;
   align-items: center;
 }
 
 .teacher-card-score-container p {
-  font-size: 1.75vw;
+  font-size: 4vw; /* Responsive font size */
   font-weight: bold;
+}
+
+/* Media queries for larger screens */
+@media (min-width: 600px) {
+  .teacher-card-main-container {
+    width: 45vw; /* Two cards per row */
+  }
+
+  .teacher-card-name {
+    font-size: 2vw;
+  }
+
+  .teacher-card-details-text-label,
+  .teacher-card-details-text-value {
+    font-size: 1.5vw;
+  }
+
+  .teacher-card-score-container p {
+    font-size: 2.5vw;
+  }
+}
+
+@media (min-width: 900px) {
+  .teacher-card-main-container {
+    width: 30vw; /* Three cards per row */
+  }
+
+  .teacher-card-name {
+    font-size: 1.5vw;
+  }
+
+  .teacher-card-details-text-label,
+  .teacher-card-details-text-value {
+    font-size: 1vw;
+  }
+
+  .teacher-card-score-container p {
+    font-size: 2vw;
+  }
+}
+
+@media (min-width: 1200px) {
+  .teacher-card-main-container {
+    width: 22vw; /* Four cards per row */
+  }
+
+  .teacher-card-name {
+    font-size: 1.2vw;
+  }
+
+  .teacher-card-details-text-label,
+  .teacher-card-details-text-value {
+    font-size: 0.85vw;
+  }
+
+  .teacher-card-score-container p {
+    font-size: 1.75vw;
+  }
 }
