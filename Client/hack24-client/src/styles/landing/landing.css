@@ -1,0 +1,124 @@
+.Banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header {
+  margin-top: 10rem;
+  font-size: 2.5rem;
+}
+
+.CenteredContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 2rem;
+  font-size: 2rem;
+}
+.leftContainer {
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  flex-direction: column;
+  margin-top: 2rem;
+  font-size: 2rem;
+  padding-left: 3rem;
+}
+
+.carousel-container {
+  padding-left: 3rem;
+  padding-right: 3rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  width: 100%;
+  gap: 1rem;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for WebKit browsers */
+}
+
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.carousel-button.left {
+  left: 0;
+}
+
+.carousel-button.right {
+  right: 0;
+}
+
+/* Responsive card sizes */
+.teacher-card-main-container {
+  flex: 0 0 100%; /* Default to full width */
+  box-sizing: border-box;
+}
+
+@media (min-width: 600px) {
+  .teacher-card-main-container {
+    flex: 0 0 48%; /* Two cards per row */
+  }
+}
+
+@media (min-width: 900px) {
+  .teacher-card-main-container {
+    flex: 0 0 32%; /* Three cards per row */
+  }
+}
+
+@media (min-width: 1200px) {
+  .teacher-card-main-container {
+    flex: 0 0 24%; /* Four cards per row */
+  }
+}
+.testimonialContainer {
+    padding-left: 10rem;
+    padding-right: 10rem;
+    display: flex;
+    justify-content: space-between; /* Adjust spacing between cards */
+    align-items: flex-start; /* Align items to the top */
+    flex-direction: row; /* Display cards in a row */
+    flex-wrap: wrap; /* Allow wrapping to the next line if needed */
+    margin-top: 2rem;
+    font-size: 2rem;
+    gap: 1rem; /* Add gap between cards */
+  }
+
+  .footerLanding{
+    height: 35vh;
+    width: 80vw;
+    margin-left: 10vw;
+    margin-top: 15vh;
+    margin-bottom: 15vh;
+    border-radius: 0.8vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 2rem;
+    background-color: var(--accent);
+    font-weight: bold;
+    color: white;
+    font-style: italic;
+}
