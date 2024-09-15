@@ -13,6 +13,7 @@ import io # for file operations
 import psycopg2
 from psycopg2 import sql
 from psycopg2.extras import RealDictCursor
+from dotenv import load_dotenv # for loading environment variables
 import subprocess # for running shell commands
 import threading # for running background tasks
 
@@ -21,13 +22,15 @@ from server.utils.RateLimiter import RateLimiter
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
+load_dotenv()
+
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 socketio = SocketIO(app, cors_allowed_origins="*", manage_session=False)
 
 UPLOAD_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'grabaciones'))
 
-api_key = '' # Api key
+api_key = os.getenv('GENAI_API_KEY')
 model_name = 'gemini-1.5-flash'
 
 # Database connection
