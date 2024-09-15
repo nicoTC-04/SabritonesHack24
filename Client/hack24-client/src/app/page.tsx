@@ -5,15 +5,22 @@ import "./../styles/landing/landing.css";
 import TeacherCard from "@/components/landing/teacherCard";
 import RatingCard from "@/components/landing/RatingCard";
 
+interface Appointment {
+  appointment_id: number;
+  appointment_timestamp: string;
+  status: string;
+}
+
 interface Course {
-  appointments: number[];
+  appointments: Appointment[];
+  course_description: string;
   course_id: number;
+  course_name: string;
   level: string;
-  name: string;
   pathtopic: string;
-  rating: string;
-  user_id: number;
-  category_name: string; // Added category_name
+  teacher_id: number;
+  teacher_name: string;
+  teacher_rating: string;
 }
 
 export default function Home() {
@@ -53,10 +60,10 @@ export default function Home() {
   };
 
   // Filtered courses by category
-  const mathCourses = courses.filter((course) => course.category_name === "Matemáticas");
-  const englishCourses = courses.filter((course) => course.category_name === "Español");
-  const historyCourses = courses.filter((course) => course.category_name === "Historia");
-  const programmingCourses = courses.filter((course) => course.category_name === "Computación");
+  const mathCourses = courses.filter((course) => course.course_name.includes("Matemáticas"));
+  const englishCourses = courses.filter((course) => course.course_name.includes("Español"));
+  const historyCourses = courses.filter((course) => course.course_name.includes("Historia"));
+  const programmingCourses = courses.filter((course) => course.course_name.includes("Computación"));
 
   return (
     <div>

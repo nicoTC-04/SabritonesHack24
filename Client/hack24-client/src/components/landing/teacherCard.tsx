@@ -3,14 +3,22 @@
 import "@/styles/landing/teacherCard.css";
 import StarRatingDisplay from "./StarRatingDisplay";
 
+interface Appointment {
+  appointment_id: number;
+  appointment_timestamp: string;
+  status: string;
+}
+
 interface Course {
-  appointments: number[];
+  appointments: Appointment[];
+  course_description: string;
   course_id: number;
+  course_name: string;
   level: string;
-  name: string;
   pathtopic: string;
-  rating: string;
-  user_id: number;
+  teacher_id: number;
+  teacher_name: string;
+  teacher_rating: string;
 }
 
 interface CourseCardProps {
@@ -36,9 +44,9 @@ const CourseCard = ({ course }: CourseCardProps) => {
       </div>
       <div className="teacher-card-description-container">
         <div className="teacher-card-name-stars-container">
-          <p className="teacher-card-name">{course.name}</p>
+          <p className="teacher-card-name">{course.course_name}</p>
           <div>
-            <StarRatingDisplay rating={parseFloat(course.rating)} />
+            <StarRatingDisplay rating={parseFloat(course.teacher_rating)} />
           </div>
         </div>
         <div className="teacher-card-teacher-details-container">
@@ -48,12 +56,12 @@ const CourseCard = ({ course }: CourseCardProps) => {
               <p className="teacher-card-details-text-value">{course.level}</p>
             </div>
             <div className="teacher-card-details-text-container">
-              <p className="teacher-card-details-text-label">ID del Curso:</p>
-              <p className="teacher-card-details-text-value">{course.course_id}</p>
+              <p className="teacher-card-details-text-label">Profesor:</p>
+              <p className="teacher-card-details-text-value">{course.teacher_name}</p>
             </div>
           </div>
           <div className="teacher-card-score-container">
-            <p>{course.rating}</p>
+            <p>{course.teacher_rating}</p>
           </div>
         </div>
       </div>
