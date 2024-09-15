@@ -9,6 +9,10 @@
     box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.2);
 }
 
+.student-class-card:hover{
+    cursor: pointer;
+}
+
 .student-class-name-container {
     display: flex;
     width: 100%;
