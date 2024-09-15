@@ -1,0 +1,20 @@
+.explorar-main-container {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  min-height: 90vh;
+  padding: 2vh 2vw;
+  gap: 5vw;
+}
+
+.explorar-cards-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 5vh;
+  max-height: 90vh;
+  overflow: scroll;
+  padding: 2vh 1vw;
+}
