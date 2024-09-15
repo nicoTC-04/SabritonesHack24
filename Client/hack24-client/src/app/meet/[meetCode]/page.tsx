@@ -6,6 +6,8 @@ import { io, Socket } from 'socket.io-client';
 import RTCHandler from '../../../services/rtcHandler';
 import toast, { Toaster } from 'react-hot-toast';
 
+import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaDotCircle, FaStopCircle } from 'react-icons/fa';
+
 import './page.css';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://216.238.66.189:5000';
@@ -176,59 +178,66 @@ const MeetingPage: React.FC = () => {
     });
   };
 
+  // const startRecording = () => {
+  //   console.log('Starting recording...');
+  //   const canvas = canvasRef.current;
+  //   if (!canvas) return;
+
+  //   drawStreamsOnCanvas();
+
+  //   // Capture video stream from canvas
+  //   const canvasStream = canvas.captureStream();
+  //   // Capture audio stream from the local stream
+  //   const audioStream = rtcHandler.current!.localStream;
+
+  //   // Combine both video and audio streams
+  //   const combinedStream = new MediaStream([...canvasStream.getTracks(), ...audioStream.getAudioTracks()]);
+
+  //   mediaRecorder.current = new MediaRecorder(combinedStream);
+  //   mediaRecorder.current.ondataavailable = (event) => {
+  //     if (event.data.size > 0) {
+  //       recordedChunks.current.push(event.data);
+  //     }
+  //   };
+
+  //   mediaRecorder.current.onstop = async () => {
+  //     console.log('Recording stopped. Uploading video...');
+  //     const blob = new Blob(recordedChunks.current, { type: 'video/webm' });
+  //     const formData = new FormData();
+  //     formData.append('video', blob, 'meeting_recording.webm');
+
+  //     try {
+  //       const response = await fetch(`${apiUrl}/api/upload-video`, {
+  //         method: 'POST',
+  //         body: formData,
+  //       });
+  //       if (!response.ok) {
+  //         throw new Error('Failed to upload video. Please try again.');
+  //       }
+  //       toast.success('Video recording uploaded successfully!');
+  //     } catch (error) {
+  //       console.error('Error uploading video:', error);
+  //       toast.error((error as Error).message);
+  //     }
+  //   };
+
+  //   mediaRecorder.current.start();
+  //   setRecording(true);
+  // };
+
+  // const stopRecording = () => {
+  //   console.log('Stopping recording...');
+  //   if (mediaRecorder.current) {
+  //     mediaRecorder.current.stop();
+  //     setRecording(false);
+  //   }
+  // };
+
   const startRecording = () => {
-    console.log('Starting recording...');
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    drawStreamsOnCanvas();
-
-    // Capture video stream from canvas
-    const canvasStream = canvas.captureStream();
-    // Capture audio stream from the local stream
-    const audioStream = rtcHandler.current!.localStream;
-
-    // Combine both video and audio streams
-    const combinedStream = new MediaStream([...canvasStream.getTracks(), ...audioStream.getAudioTracks()]);
-
-    mediaRecorder.current = new MediaRecorder(combinedStream);
-    mediaRecorder.current.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        recordedChunks.current.push(event.data);
-      }
-    };
-
-    mediaRecorder.current.onstop = async () => {
-      console.log('Recording stopped. Uploading video...');
-      const blob = new Blob(recordedChunks.current, { type: 'video/webm' });
-      const formData = new FormData();
-      formData.append('video', blob, 'meeting_recording.webm');
-
-      try {
-        const response = await fetch(`${apiUrl}/api/upload-video`, {
-          method: 'POST',
-          body: formData,
-        });
-        if (!response.ok) {
-          throw new Error('Failed to upload video. Please try again.');
-        }
-        toast.success('Video recording uploaded successfully!');
-      } catch (error) {
-        console.error('Error uploading video:', error);
-        toast.error((error as Error).message);
-      }
-    };
-
-    mediaRecorder.current.start();
     setRecording(true);
   };
-
   const stopRecording = () => {
-    console.log('Stopping recording...');
-    if (mediaRecorder.current) {
-      mediaRecorder.current.stop();
       setRecording(false);
-    }
   };
 
   if (!username || !rtcHandler.current) {
@@ -247,7 +256,7 @@ const MeetingPage: React.FC = () => {
     }, [stream]);
 
     return (
-      <div className={`video-container ${isVideoOff ? 'video-off' : ''}`}>
+      <div className={`video-container ${isVideoOff ? 'video-off' : ''}`} >
         <video ref={videoRef} autoPlay playsInline muted={muted} className="video-element" />
         <p className="video-username">{peerName}</p>
       </div>
@@ -258,12 +267,6 @@ const MeetingPage: React.FC = () => {
   return (
     <div className="container">
       <Toaster position="top-center" reverseOrder={false} />
-      <header className="header">
-        <div>
-          <h1>{meetingId}</h1>
-          <p>Welcome, {username}!</p>
-        </div>
-      </header>
       <main className="main">
         <div className="video-grid">
           {rtcHandler.current?.localStream ? (
@@ -281,14 +284,28 @@ const MeetingPage: React.FC = () => {
         </div>
       </main>
       <footer className="footer">
-        <button onClick={toggleMute}>{isMuted ? 'Unmute' : 'Mute'}</button>
-        <button onClick={toggleVideo}>{isVideoOff ? 'Turn On Video' : 'Turn Off Video'}</button>
-        {recording ? (
-          <button onClick={stopRecording}>Stop Recording</button>
-        ) : (
-          <button onClick={startRecording}>Start Recording</button>
-        )}
-        <button className="bg-red" onClick={() => router.push('/')}>Leave Meeting</button>
+        <div className="footerIcons">
+          <button onClick={toggleMute} className="iconButton">
+            {isMuted ? <FaMicrophoneSlash style={{ width: 'auto', height: '3.6rem' }} className="icon" />
+            : 
+            <FaMicrophone style={{ width: 'auto', height: '3rem', marginLeft:'0.2rem' }} className="icon" />}
+          </button>
+          <button onClick={toggleVideo} className="iconButton">
+            {isVideoOff ? <FaVideoSlash style={{ width: 'auto', height: '3.2rem' }} className="icon" /> 
+                        : <FaVideo style={{ width: 'auto', height: '3rem' }} className="icon" />}
+          </button>
+          {recording ? (
+            <button onClick={stopRecording} className="iconButton">
+              <FaStopCircle style={{ width: 'auto', height: '3rem', color: 'red' }} className="icon" />
+            </button>
+          ) : (
+            <button onClick={startRecording} className="iconButton">
+              <FaDotCircle style={{ width: 'auto', height: '3rem' }} className="icon" />
+            </button>
+          )}
+        </div>
+        
+        <button className="bg-red" onClick={() => router.push('/')}>Abandonar</button>
       </footer>
       {/* Canvas for video recording */}
       <canvas ref={canvasRef} style={{ display: 'none' }} width={1280} height={720} />
