@@ -16,7 +16,6 @@
   font-family: istok-web;
   font-size: 2rem;
   color: var(--accent);
-
 }
 
 .navItem {
@@ -26,6 +25,7 @@
 }
 
 .navItem_profile {
+  position: relative; /* Ensure dropdown is positioned correctly */
   margin-right: 20px;
 }
 
@@ -39,4 +39,41 @@
 .navLink:hover,
 .navLink:focus {
   font-size: 1.2rem;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0; /* Align dropdown to the right */
+  background-color: var(--primary); /* Use primary color for background */
+  color: var(--secondary); /* Use secondary color for text */
+  border: 1px solid var(--accent); /* Use accent color for border */
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.dropdown p {
+  margin: 0.5rem 0;
+  color: var(--secondary); /* Ensure text color matches the palette */
+}
+
+.dropdown button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--accent); /* Use accent color for button background */
+  color: var(--primary); /* Use primary color for button text */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown button:hover {
+  background-color: var(--secondary); /* Use secondary color for button hover */
+  color: var(--primary); /* Ensure text color remains readable */
 }
