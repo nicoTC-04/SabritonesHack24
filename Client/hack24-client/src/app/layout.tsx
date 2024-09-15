@@ -1,4 +1,6 @@
-import type { Metadata } from "next";
+"use client";
+
+import { usePathname } from 'next/navigation'; // Import usePathname
 import localFont from "next/font/local";
 import Navbar from "../components/landing/navbar";
 import StudentClass from "@/components/misclases/StudentClass"; // Import the StudentClass component
@@ -15,22 +17,18 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-export const metadata: Metadata = {
-  title: "Palestra",
-  description: "Education platform for students and teachers",
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Define the student data
+  const pathname = usePathname();
+  const hideNavbar = pathname.startsWith('/meet');
 
   return (
     <html lang="en">
       <body>
-        <Navbar />
+        {!hideNavbar && <Navbar />}
         {children}
       </body>
     </html>
