@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import ModalClass from "@/components/misclases/ModalClass"
 import PostClassModal from "@/components/misclases/PostClassModal"
 import StudentClass from "@/components/misclases/StudentClass"
@@ -19,6 +19,9 @@ export default function MisClases() {
   const[openModal, setOpenModal] = useState(false);
   const[openPostModal, setOpenPostModal] = useState(false);
 
+  const [upcomingClasses, setUpcomingClasses] = useState<Nico[]>([]);
+  const [pastClasses, setPastClasses] = useState<Nico[]>([]);
+
   // Pre-class modal states
   const[modalClassName, setModalClassName] = useState("Matematicas 101");
   const[modalProfessorName, setModalProfessorName] = useState("Carlos Francisco Hernandez");
@@ -28,6 +31,23 @@ export default function MisClases() {
   // Post-class modal states
   const[postClassVideoUrl, setPostClassVideoUrl] = useState("");
   const[postClassDescription, setPostClassDescription] = useState("");
+
+  useEffect(() => {
+    // Replace with the actual user_id
+    const userId = localStorage.getItem('user');
+
+    fetch(`http://216.238.66.189:5000/getClasses?user_id=${userId}`)
+      .then(response => response.json())
+      .then(data => {
+        // Separate upcoming and past classes based on a date comparison
+        const upcoming = data.filter((cls: Nico) => /* Your condition for upcoming classes */);
+        const past = data.filter((cls: Nico) => /* Your condition for past classes */);
+
+        setUpcomingClasses(upcoming);
+        setPastClasses(past);
+      })
+      .catch(error => console.error('Error fetching classes:', error));
+  }, []);
 
 
   const onClassClick = ({ name, professor, date, meetingId }: Nico) => {
