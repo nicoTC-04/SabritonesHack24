@@ -2,8 +2,11 @@ from flask import Flask, request, jsonify
 import psycopg2
 from psycopg2 import sql
 from psycopg2.extras import RealDictCursor
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True)
+
 
 # Database connection
 def get_db_connection():
@@ -165,5 +168,5 @@ def get_classes():
 
     return jsonify(classes)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
