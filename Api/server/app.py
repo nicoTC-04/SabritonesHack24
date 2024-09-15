@@ -132,10 +132,8 @@ def handle_disconnect():
         
         
 
-        
-        
-        
-        
+
+
         
 def summarize_text(transcript):
     text = transcript
@@ -190,39 +188,37 @@ def transcribe_audio(file_path):
 
     return transcription
 
-        
-# Function to convert the mp4 file to mp3
-def convert_to_mp3(input_file, output_file, timestamp):
+    
+def convert_webm_to_mp3(input_file, output_file, timestamp):
     try:
-        # Convert the .mp4 file to .mp3 using ffmpeg
-        subprocess.run([
-            'ffmpeg', '-i', input_file, output_file
-        ], check=True)
+        # Normalize the file paths to use forward slashes and ensure drive letters are properly formatted
+        input_file = os.path.normpath(input_file).replace("\\", "/")
+        output_file = os.path.normpath(output_file).replace("\\", "/")
 
-        # Optionally, delete the original .mp4 file after conversion
-        # os.remove(input_file)
+        # Convert the .webm file to .mp3 using GStreamer
+        pipeline = f'gst-launch-1.0 filesrc location="{input_file}" ! decodebin ! audioconvert ! lamemp3enc ! filesink location="{output_file}"'
+        subprocess.run(pipeline, shell=True, check=True)
+
         Debugger.log_message('INFO', f'File converted to mp3 successfully: {output_file}')
 
         # Transcribe the audio file using Google Cloud Speech-to-Text
         transcription = transcribe_audio(output_file)
         Debugger.log_message('INFO', f'Transcription: {transcription}')
-        
+
         os.remove(output_file)
-        
-        # save transcription to .txt file 
-        # with open(os.path.join(UPLOAD_FOLDER, f"transcription_{timestamp}.txt"), 'w') as f:
-        #     f.write(transcription)
-        
+
+        # Save transcription to a .txt file
         summary = summarize_text(transcription)
         with open(os.path.join(UPLOAD_FOLDER, f"summary_{timestamp}.txt"), 'w') as f:
             f.write(summary)
-            
+
         Debugger.log_message('INFO', f'Summary: {summary}')
-            
+
     except subprocess.CalledProcessError as e:
         Debugger.log_message('ERROR', f"Failed to convert file: {str(e)}")
     except Exception as e:
         Debugger.log_message('ERROR', f"Unexpected error during conversion: {str(e)}")
+
 
 
 # Route to handle file upload
@@ -239,7 +235,7 @@ def upload_file():
     if file and file.mimetype.startswith('video/'):  # Check if the uploaded file is a video
         # Generate a unique filename based on the current date and time
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        file_extension = 'webm'  # Save the uploaded file as .webm first
+        file_extension = 'webm'  # Save the uploaded file as .webm
         file_name = f"recording_{timestamp}.{file_extension}"
         file_path = os.path.join(UPLOAD_FOLDER, file_name)
 
@@ -247,27 +243,16 @@ def upload_file():
             # Save the uploaded file
             file.save(file_path)
 
-            # Ensure the paths use the correct format
-            input_file = os.path.abspath(file_path)
-            output_mp4_file = os.path.abspath(os.path.join(UPLOAD_FOLDER, f"recording_{timestamp}.mp4"))
-            output_mp3_file = os.path.abspath(os.path.join(UPLOAD_FOLDER, f"recording_{timestamp}.mp3"))
-
-            # Convert the .webm file to .mp4 using ffmpeg
-            subprocess.run([
-                'ffmpeg', '-i', input_file, output_mp4_file
-            ], check=True)
-
-            # Optionally, delete the original .webm file after conversion
-            os.remove(input_file)
+            # Ensure the paths are correctly formatted for GStreamer
+            input_file = os.path.normpath(file_path).replace("\\", "/")
+            output_mp3_file = os.path.normpath(os.path.join(UPLOAD_FOLDER, f"recording_{timestamp}.mp3")).replace("\\", "/")
 
             # Start the MP3 conversion in a background thread
-            threading.Thread(target=convert_to_mp3, args=(output_mp4_file, output_mp3_file, timestamp)).start()
+            threading.Thread(target=convert_webm_to_mp3, args=(input_file, output_mp3_file, timestamp)).start()
 
-            # Return immediately after the file is uploaded and converted to mp4
+            # Return immediately after the file is uploaded
             return 'File uploaded successfully.', 200
 
-        except subprocess.CalledProcessError as e:
-            return f"Failed to convert file: {str(e)}", 500
         except Exception as e:
             return f"Failed to upload file: {str(e)}", 500
 
