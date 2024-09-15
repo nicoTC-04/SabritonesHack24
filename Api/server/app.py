@@ -158,8 +158,7 @@ def summarize_text(transcript):
 
 def transcribe_audio(file_path):
     # Path to your service account key file
-    credentials_path = os.path.join(os.path.dirname(__file__), '/../../../hack24palestra-8ae7da29e71c.json')
-
+    credentials_path = os.path.join(os.path.dirname(__file__), '../../../hack24palestra-8ae7da29e71c.json')
     # Load the credentials
     credentials = service_account.Credentials.from_service_account_file(credentials_path)
 
