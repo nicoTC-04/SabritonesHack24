@@ -44,6 +44,12 @@ export default function MisClases() {
           }
           const data = await response.json();
           console.log("clases",data);
+
+          const upcoming = data.filter((clase: any) => new Date(clase.date) >= new Date());
+          const past = data.filter((clase: any) => new Date(clase.date) < new Date());
+
+          setUpcomingClasses(upcoming);
+          setPastClasses(past);
         } catch (error) {
           console.error("There was an error fetching the courses!", error);
         }
@@ -86,13 +92,16 @@ export default function MisClases() {
         {/* Próximas Clases */}
         <div className="myclasses-left-container-next-class">
           <p className="myclasses-header">Próximas Clases</p>
-          <StudentClass 
-            name="Matemáticas 101" 
-            professor="Carlos Francisco Hernandez" 
-            date="Martes - 15:25pm" 
-            meetingId="https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_3x4.jpg" 
-            toggleModal={onClassClick} 
-          />
+          {upcomingClasses.map((cls) => (
+            <StudentClass 
+              key={cls.name} // You might want to use a more unique key like cls.id
+              name={cls.name}
+              professor={cls.professor}
+              date={cls.date}
+              meetingId={cls.meetingId}
+              toggleModal={onClassClick}
+            />
+          ))}
           {openModal && (
             <ModalClass
               toggleModal={toggleModalHandler}
@@ -107,20 +116,17 @@ export default function MisClases() {
         {/* Clases Pasadas */}
         <div className="myclasses-left-container-previous-class">
           <p className="myclasses-header">Clases Pasadas</p>
-          <StudentClass 
-            name="Historia 201" 
-            professor="Juan Perez" 
-            date="Lunes - 14:00pm" 
-            videoUrl="https://path-to-your-video.mp4" 
-            description="Lorem ipsum odor amet, consectetuer adipiscing elit. Purus rutrum condimentum netus torquent morbi; cursus accumsan. Lacinia iaculis efficitur suspendisse elementum potenti? Fusce quis consequat efficitur curabitur tempor amet class gravida sagittis. Augue arcu massa nam etiam; magna a cras. Libero dictum non parturient duis id pharetra adipiscing mi tincidunt. Tincidunt odio scelerisque eu quis fringilla taciti. Est platea sapien consectetur sagittis finibus parturient faucibus. Montes inceptos magna magnis magna tellus pharetra id sodales nunc.
-
-Penatibus sociosqu cras nullam maximus; luctus montes eleifend per. Netus pretium mauris duis; potenti curabitur platea porttitor magnis? Rhoncus hac eget pulvinar adipiscing mattis quis litora. Vulputate blandit semper sit integer dictum, morbi consequat faucibus fames. At conubia vel tincidunt vel elementum parturient. Nullam semper nullam amet integer adipiscing turpis, lacus tellus ultricies. Tincidunt varius phasellus justo urna fusce montes. Phasellus id non integer imperdiet tristique.
-
-Magna maximus eget vitae dictumst porttitor cras nam eget. Diam felis per orci at penatibus enim. Interdum ex vestibulum tincidunt at metus est laoreet eu. Praesent praesent elit interdum taciti mi orci neque. Ipsum imperdiet ullamcorper nascetur primis varius ullamcorper dis lacus. Molestie augue vehicula himenaeos urna donec diam. Potenti condimentum aliquam mus volutpat pulvinar facilisi metus. Quisque augue taciti vivamus et fringilla. Netus efficitur ut ad; elementum massa dis.
-
-Proin aliquam dictum nec ac cursus venenatis. Pretium consequat fusce hendrerit primis nisi, sit nisl primis placerat. Ultrices curabitur adipiscing gravida tempus lacus. Maecenas vehicula congue auctor, lacinia adipiscing vehicula id luctus. Nisi pellentesque non aliquet ornare dictumst varius nullam. Nunc curae malesuada feugiat ornare,." 
-            toggleModal={onPastClassClick} 
-          />
+          {pastClasses.map((cls) => (
+            <StudentClass 
+              key={cls.name}
+              name={cls.name}
+              professor={cls.professor}
+              date={cls.date}
+              videoUrl={cls.videoUrl}
+              description={cls.description}
+              toggleModal={onPastClassClick}
+            />
+          ))}
           {openPostModal && (
             <PostClassModal
               toggleModal={togglePostModalHandler}

@@ -427,23 +427,31 @@ def get_classes():
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     query = sql.SQL("""
         SELECT 
-            course_id, 
-            student_id, 
-            TO_CHAR(timestamp, 'YYYY-MM-DD HH24:MI:SS') AS timestamp,
+            c.id AS class_id, 
+            c.course_id, 
+            crs.name AS course_name,
+            crs.level,
+            crs.pathToPic,
+            crs.description AS course_description,
+            c.student_id, 
+            TO_CHAR(c.timestamp, 'YYYY-MM-DD HH24:MI:SS') AS timestamp,
             -- Convert duration (assuming it is stored as an interval)
             CASE
-                WHEN EXTRACT(HOUR FROM duration) > 0 THEN
-                    EXTRACT(HOUR FROM duration)::text || ' hour(s)'
-                WHEN EXTRACT(MINUTE FROM duration) > 0 THEN
-                    EXTRACT(MINUTE FROM duration)::text || ' minute(s)'
+                WHEN EXTRACT(HOUR FROM c.duration) > 0 THEN
+                    EXTRACT(HOUR FROM c.duration)::text || ' hour(s)'
+                WHEN EXTRACT(MINUTE FROM c.duration) > 0 THEN
+                    EXTRACT(MINUTE FROM c.duration)::text || ' minute(s)'
                 ELSE
-                    EXTRACT(SECOND FROM duration)::text || ' second(s)'
+                    EXTRACT(SECOND FROM c.duration)::text || ' second(s)'
             END AS duration,
-            path_video, 
-            summary
-        FROM my_schema.Classes
-        WHERE student_id = %s
+            c.path_video, 
+            c.summary,
+            c.meeting_id
+        FROM my_schema.Classes c
+        JOIN my_schema.Courses crs ON c.course_id = crs.course_id
+        WHERE c.student_id = %s
     """)
+
 
 
     cursor.execute(query, (user_id,))
