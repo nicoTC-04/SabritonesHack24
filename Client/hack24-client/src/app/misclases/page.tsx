@@ -2,6 +2,6 @@
 
 export default function MisClases() {
   return (
-    <div>Login</div>
+    <div>mis clases</div>
   )
 }
