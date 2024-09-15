@@ -8,5 +8,8 @@ export default function SearchBar() {
             <FaSearch className="search-icon" />
             <input type="text" placeholder="Buscar..." className="search-input" />
         </div>
+
+
+
     );
 }
