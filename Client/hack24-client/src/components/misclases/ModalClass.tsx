@@ -3,16 +3,27 @@ import'@/styles/misclases/ModalClass.css'
 
 type ModalClassProps = {
     toggleModal: Function;
-    linkURL: string;
+    meetingId: string;
     nombre: string;
     professor: string;
-    fecha: string;
-    hora: string;
-}
+    date: string;
+};
 
-const ModalClass = ({ nombre, professor, fecha, hora, linkURL, toggleModal }: ModalClassProps) => {
+const ModalClass = ({
+    nombre, 
+    professor, 
+    date, 
+    meetingId, 
+    toggleModal 
+    }: ModalClassProps) => {
+    const imageModalProfesorErrorHandler = (
+        event: React.SyntheticEvent<HTMLImageElement>
+    ) => {
+        event.currentTarget.src =
+            "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+    };
     return (
-        <Modal width={40} height={45} modalToggle={toggleModal}>
+        <Modal width={50} height={55} modalToggle={toggleModal}>
             <div className="modal-class-general-container">
                 <div className="modal-class-container">
                     <div className="modal-class-title">
@@ -22,14 +33,18 @@ const ModalClass = ({ nombre, professor, fecha, hora, linkURL, toggleModal }: Mo
                         <p>{professor}</p>
                     </div>
                     <div className="modal-class-fecha">
-                        <p>{fecha} {hora}</p>
+                        <p>{date}</p>
                     </div>
                     <div className="modal-class-link">
-                        <a href={linkURL} className="button">Link a tu clase!</a>
+                        <a href={meetingId} className="button">Link a tu clase!</a>
                     </div>
                 </div>
                 <div className="modal-class-image">
-                    hi
+                    <img
+                        src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                        className="modal-explorar-clase-image"
+                        onError={imageModalProfesorErrorHandler}
+                    />
                 </div>
             </div>
         </Modal>

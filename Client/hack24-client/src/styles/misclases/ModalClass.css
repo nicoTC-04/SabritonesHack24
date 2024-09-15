@@ -1,22 +1,29 @@
 .modal-class-general-container {
     display: flex;
     flex-direction: row;
-    height: 90%;
+    height: 100%;
     margin-left: 1.5rem;
     gap: 2vw;
 }
 
 .modal-class-image {
     display: flex;
+    width: 50%;
+    height: 90%;
     flex-direction: column;
     margin: 2vw;
     justify-content: center;
 }
 
+.modal-class-image img{
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+
 .modal-class-container {
     display: flex;
     flex-direction: column;
-    margin: 2vw;
     justify-content: center;
 }
 
@@ -36,13 +43,12 @@
 }
 
 .modal-class-link {
-    margin-left: rem;
     margin-top: 2rem;
 }
 
 .button {
     background-color: blue;
-    padding: 2vh 4vw;
+    padding: 2vh;
     color: white;
     font-weight: bold;
     border-radius: 1rem;

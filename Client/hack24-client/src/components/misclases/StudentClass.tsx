@@ -1,22 +1,31 @@
-"use client";
+'use client';
 
-import React from 'react'
-import { useState } from 'react';
-import '@/styles/misclases/StudentClass.css'
+import React from 'react';
+import '@/styles/misclases/StudentClass.css';
 
 type StudentClassProps = {
     name: string;
     professor: string;
-    fecha: string;
-    hora: string;
+    date: string;
+    meetingId?: string; // Optional for post-class
+    videoUrl?: string;   // Only for post-class
+    description?: string; // Only for post-class
     toggleModal: Function;
 };
 
-const StudentClass = ({ name, professor, fecha, hora, toggleModal }: StudentClassProps) => {
+const StudentClass = ({
+    name,
+    professor,
+    date,
+    meetingId,
+    videoUrl, // post-class
+    description, // post-class
+    toggleModal,
+}: StudentClassProps) => {
 
     const toggleModalHandler = () => {
-        toggleModal();
-    }
+        toggleModal({ name, professor, date, meetingId, videoUrl, description });
+    };
 
     return (
         <div className='student-class-card' onClick={toggleModalHandler}>
@@ -28,11 +37,10 @@ const StudentClass = ({ name, professor, fecha, hora, toggleModal }: StudentClas
                 <p style={{fontWeight: 'bold'}}>{professor}</p>
             </div>
             <div className='student-date-container'>
-                <p>{fecha}: {hora}</p>
+                <p>{date}</p>
             </div>
         </div>
     );
 };
 
 export default StudentClass;
-

@@ -1,0 +1,61 @@
+.modal-class-post-general-container {
+    display: flex;
+    flex-direction: row;
+    margin-left: 7vw;
+}
+
+.modal-class-post-image {
+    display: flex;
+    width: 25%;
+    height: 25%;
+    flex-direction: column;
+    margin: 2vw;
+    justify-content: center;
+}
+
+.modal-class-post-image img{
+    object-fit:contain;
+}
+
+.modal-class-post-container {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.modal-class-post-title {
+    display: flex;
+    font-size: 1.7em;
+    font-weight: bold;
+}
+
+.modal-class-post-professor {
+    font-size: 1.2em;
+    margin-top: 0.5rem;
+}
+
+.modal-class-post-fecha {
+    font-size: 1.2em;
+}
+
+.modal-class-post-description {
+    font-size: 1.2em;
+    margin-top: 1rem;
+    flex: 1; 
+    margin-left: 1.5rem;
+}
+
+.modal-class-post-video {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    margin: 2vw;
+    justify-content: center;
+}
+
+.modal-class-post-video video {
+    object-fit: cover;
+    height: 100%;
+    width: 90%;
+}
