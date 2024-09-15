@@ -4,17 +4,26 @@ import "@/styles/explorar/TeacherPayCard.css";
 import StarRatingDisplay from "../landing/StarRatingDisplay";
 
 type TeacherPayCardProps = {
-    image: string;
-    name: string;
-    rating: number;
-    description: string;
-    category: string;
-    grade: string;
-    price: number;
-    toggleModal: Function;
-}
+  image: string;
+  name: string;
+  rating: number;
+  description: string;
+  category: string;
+  grade: string;
+  price: number;
+  toggleModal: Function;
+};
 
-const TeacherPayCard = ({image, name, rating, description, category, grade, price, toggleModal}: TeacherPayCardProps) => {
+const TeacherPayCard = ({
+  image,
+  name,
+  rating,
+  description,
+  category,
+  grade,
+  price,
+  toggleModal,
+}: TeacherPayCardProps) => {
   const imagePayErrorHandler = (
     event: React.SyntheticEvent<HTMLImageElement>
   ) => {
@@ -23,8 +32,13 @@ const TeacherPayCard = ({image, name, rating, description, category, grade, pric
   };
 
   const toggleModalHandler = () => {
-    toggleModal();
-  }
+    toggleModal({
+      name: category,
+      description,
+      price,
+      professorName: name,
+    });
+  };
 
   return (
     <div className="teacher-pay-main-container">
@@ -48,9 +62,7 @@ const TeacherPayCard = ({image, name, rating, description, category, grade, pric
               </div>
             </div>
             <div className="teacher-pay-description-container">
-              <p className="teacher-pay-description">
-                {description}
-              </p>
+              <p className="teacher-pay-description">{description}</p>
             </div>
           </div>
           <div className="teacher-pay-cat-grad-container">
