@@ -1,3 +1,45 @@
+.modal-class-general-container {
+    display: flex;
+    flex-direction: row;
+    height: 90%;
+    margin-left: 1.5rem;
+    gap: 2vw;
+}
+
+.modal-class-image {
+    display: flex;
+    flex-direction: column;
+    margin: 2vw;
+    justify-content: center;
+}
+
+.modal-class-container {
+    display: flex;
+    flex-direction: column;
+    margin: 2vw;
+    justify-content: center;
+}
+
+.modal-class-title {
+    display: flex;
+    font-size: 1.7em;
+    font-weight: bold;
+}
+
+.modal-class-professor {
+    font-size: 1.2em;
+    margin-top: 0.5rem;
+}
+
+.modal-class-fecha {
+    font-size: 1.2em;
+}
+
+.modal-class-link {
+    margin-left: rem;
+    margin-top: 2rem;
+}
+
 .button {
     background-color: blue;
     padding: 2vh 4vw;
@@ -5,3 +47,4 @@
     font-weight: bold;
     border-radius: 1rem;
 }
+
