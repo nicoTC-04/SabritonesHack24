@@ -583,6 +583,40 @@ def get_video():
         cursor.close()
         conn.close()
 
+# Endpoint to get the summary for a class
+@app.route('/getSummary', methods=['GET'])
+def get_summary():
+    class_id = request.args.get('class_id')
+
+    if not class_id:
+        return jsonify({'error': 'class_id is required'}), 400
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        # Fetch the summary for the given class_id
+        cursor.execute(sql.SQL("""
+            SELECT summary
+            FROM my_schema.Classes
+            WHERE id = %s
+        """), (class_id,))
+        result = cursor.fetchone()
+
+        if not result:
+            return jsonify({'error': 'Summary not found for this class'}), 404
+
+        summary = result[0] if result[0] else ""
+
+        # Return the summary
+        return jsonify({'summary': summary})
+
+    except psycopg2.Error as e:
+        Debugger.log_message('ERROR', f"Failed to fetch summary: {str(e)}")
+        return jsonify({'error': 'Failed to retrieve summary'}), 500
+
+    finally:
+        cursor.close()
+        conn.close()
 
 
 
