@@ -26,7 +26,6 @@ type Nico = {
   pathtopic: string;
 };
 
-
 export default function MisClases() {
   const [openModal, setOpenModal] = useState(false);
   const [openPostModal, setOpenPostModal] = useState(false);
@@ -35,9 +34,9 @@ export default function MisClases() {
   const [pastClasses, setPastClasses] = useState<Nico[]>([]);
 
   // Pre-class modal states
-  const [modalClassName, setModalClassName] = useState("Matemáticas 101");
-  const [modalProfessorName, setModalProfessorName] = useState("Carlos Francisco Hernández");
-  const [modalFecha, setModalFecha] = useState("Martes - 15:25pm");
+  const [modalClassName, setModalClassName] = useState("");
+  const [modalProfessorName, setModalProfessorName] = useState("");
+  const [modalFecha, setModalFecha] = useState("");
   const [modalMeetingId, setModalMeetingId] = useState("");
 
   // Post-class modal states
@@ -70,19 +69,19 @@ export default function MisClases() {
     fetchClasses();
   }, []);
 
-  const onClassClick = ({ course_name, level, timestamp, meeting_id }: Nico) => {
+  const onClassClick = ({ course_name, teacher_name, timestamp, meeting_id }: Nico) => {
     // Pre-class
     setModalClassName(course_name);
-    setModalProfessorName(level); // Adjust if professor's name needs to be fetched differently
+    setModalProfessorName(teacher_name); // Use teacher_name
     setModalFecha(timestamp);
     setModalMeetingId(meeting_id);
     setOpenModal(true);
   };
 
-  const onPastClassClick = ({ course_name, level, timestamp, path_video, summary }: Nico) => {
+  const onPastClassClick = ({ course_name, teacher_name, timestamp, path_video, summary }: Nico) => {
     // Post-class
     setModalClassName(course_name);
-    setModalProfessorName(level); // Adjust if professor's name needs to be fetched differently
+    setModalProfessorName(teacher_name); // Use teacher_name
     setModalFecha(timestamp);
     setPostClassVideoUrl(path_video);
     setPostClassDescription(summary);
@@ -107,12 +106,11 @@ export default function MisClases() {
             <StudentClass
               key={cls.class_id}
               name={cls.course_name}
-              professor={cls.teacher_name} // Now using teacher's name
+              professor={cls.teacher_name} // Pass teacher's name
               date={cls.timestamp}
               meetingId={cls.meeting_id}
               toggleModal={() => onClassClick(cls)}
             />
-          
           ))}
           {openModal && (
             <ModalClass
@@ -130,13 +128,14 @@ export default function MisClases() {
           <p className="myclasses-header">Clases Pasadas</p>
           {pastClasses.map((cls) => (
             <StudentClass
-            key={cls.class_id}
-            name={cls.course_name}
-            professor={cls.teacher_name} // Now using teacher's name
-            date={cls.timestamp}
-            meetingId={cls.meeting_id}
-            toggleModal={() => onClassClick(cls)}
-          />
+              key={cls.class_id}
+              name={cls.course_name}
+              professor={cls.teacher_name} // Pass teacher's name
+              date={cls.timestamp}
+              videoUrl={cls.path_video}
+              description={cls.summary}
+              toggleModal={() => onPastClassClick(cls)}
+            />
           ))}
           {openPostModal && (
             <PostClassModal

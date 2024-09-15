@@ -384,6 +384,7 @@ def get_categories():
 
     return jsonify(categories)
 
+
 # Make Appointment endpoint
 @app.route('/makeAppointment', methods=['POST'])
 def make_appointment():
@@ -393,30 +394,48 @@ def make_appointment():
 
     conn = get_db_connection()
     cursor = conn.cursor()
+    
     try:
-        # Create appointment
+        # Generate a unique meeting ID using uuid
+        meeting_id = str(uuid.uuid4())
+
+        # Create a meeting session using student_id as the host
+        session_storage[meeting_id] = {
+            'host': student_id,
+            'users': {},  # {username: sid}
+        }
+
+        Debugger.log_message('INFO', f'Meeting created with ID: {meeting_id} by student_id: {student_id}')
+
+        # Create an appointment in the Appointments table
         cursor.execute(sql.SQL("""
             INSERT INTO my_schema.Appointments (teacher_id, status, timestamp)
-            VALUES ((SELECT teacher_id FROM my_schema.Courses WHERE course_id = %s), 'Reserved', NOW())
+            VALUES (
+                (SELECT teacher_id FROM my_schema.Courses WHERE course_id = %s), 
+                'Reserved', 
+                NOW()
+            )
         """), (course_id,))
         conn.commit()
-        appointment_id = cursor.fetchone()[0]
 
-        # Create class entry
+        # Insert into the Classes table
         cursor.execute(sql.SQL("""
-            INSERT INTO my_schema.Classes (course_id, student_id, timestamp)
-            VALUES (%s, %s, NOW())
-        """), (course_id, student_id))
+            INSERT INTO my_schema.Classes (course_id, student_id, timestamp, duration, path_video, summary, meeting_id)
+            VALUES (%s, %s, NOW(), INTERVAL '1 hour', '', '', %s)
+        """), (course_id, student_id, meeting_id))
         conn.commit()
 
         cursor.close()
         conn.close()
-        return jsonify({'success': True})
+
+        return jsonify({'success': True, 'meeting_id': meeting_id})
     except psycopg2.Error as e:
         conn.rollback()
         cursor.close()
         conn.close()
         return jsonify({'error': str(e)}), 500
+
+
 
 # Get Classes endpoint
 @app.route('/getClasses', methods=['GET'])
