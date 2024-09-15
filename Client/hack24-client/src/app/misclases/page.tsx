@@ -57,8 +57,8 @@ export default function MisClases() {
         const data: Nico[] = await response.json();
         console.log("clases", data);
 
-        const upcoming = data.filter((clase) => new Date(clase.timestamp) >= new Date());
-        const past = data.filter((clase) => new Date(clase.timestamp) < new Date());
+        const upcoming = data.filter((clase) => new Date(clase.timestamp) >= new Date() && clase.path_video.trim() === "");
+        const past = data.filter((clase) => new Date(clase.timestamp) < new Date() || clase.path_video.trim() !== "");
 
         setUpcomingClasses(upcoming);
         setPastClasses(past);
