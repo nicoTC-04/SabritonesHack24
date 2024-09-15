@@ -39,7 +39,7 @@ const StudentClass = ({ student }: StudentClassProps) => {
 
         </div>
 
-        /* Modal to show when card is clicked */
+        /* Modal despues */
 
         
 

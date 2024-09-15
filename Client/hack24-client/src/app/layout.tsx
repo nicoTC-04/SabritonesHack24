@@ -26,18 +26,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   // Define the student data
-  const studentData = {
-    name: "Mathematics 101",
-    professor: "Dr. John Doe",
-    fecha: "mañana",
-    hora: "2:15",
-  };
 
   return (
     <html lang="en">
       <body>
         <Navbar />
-        <StudentClass student={studentData} />
         {children}
       </body>
     </html>
