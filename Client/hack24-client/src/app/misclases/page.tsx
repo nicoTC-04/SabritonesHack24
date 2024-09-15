@@ -33,20 +33,23 @@ export default function MisClases() {
   const[postClassDescription, setPostClassDescription] = useState("");
 
   useEffect(() => {
-    // Replace with the actual user_id
-    const userId = localStorage.getItem('user');
+      const fetchClasses = async () => {
+        try {
+          const user = localStorage.getItem('user');
+          const userId = user ? JSON.parse(user).id : null;
 
-    fetch(`http://216.238.66.189:5000/getClasses?user_id=${userId}`)
-      .then(response => response.json())
-      .then(data => {
-        // Separate upcoming and past classes based on a date comparison
-        const upcoming = data.filter((cls: Nico) => /* Your condition for upcoming classes */);
-        const past = data.filter((cls: Nico) => /* Your condition for past classes */);
+          const response = await fetch(`http://216.238.66.189:5000/getClasses?user_id=${userId}`);
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          console.log("clases",data);
+        } catch (error) {
+          console.error("There was an error fetching the courses!", error);
+        }
+      };
 
-        setUpcomingClasses(upcoming);
-        setPastClasses(past);
-      })
-      .catch(error => console.error('Error fetching classes:', error));
+      fetchClasses();
   }, []);
 
 
