@@ -33,8 +33,7 @@ const Navbar: React.FC = () => {
             <div className="navItem">
                 <Link href="/explorar" className="navLink">Explorar</Link>
                 <Link href="/misclases" className="navLink">Mis Clases</Link>
-            </div>
-            <div className="navItem_profile">
+                <div className="navItem_profile">
                 <button onClick={handleProfileClick} className="navLink">Mi Perfil</button>
                 {isDropdownOpen && (
                     <div className="dropdown">
@@ -54,6 +53,8 @@ const Navbar: React.FC = () => {
                     </div>
                 )}
             </div>
+            </div>
+
         </nav>
     );
 };
