@@ -1,7 +1,8 @@
 .modal-class-post-general-container {
     display: flex;
     flex-direction: row;
-    margin-left: 7vw;
+    margin-left: 0vw;
+    background-color: var(--teacher-image-background-default);
 }
 
 .modal-class-post-image {
@@ -42,7 +43,7 @@
 .modal-class-post-description {
     font-size: 1.2em;
     margin-top: 1rem;
-    flex: 1; 
+    flex: 1;
     margin-left: 1.5rem;
 }
 

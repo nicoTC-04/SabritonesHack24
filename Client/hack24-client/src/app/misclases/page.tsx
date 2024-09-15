@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from "react";
 import ModalClass from "@/components/misclases/ModalClass";
 import PostClassModal from "@/components/misclases/PostClassModal";
 import StudentClass from "@/components/misclases/StudentClass";
-import '@/styles/misclases/misclases.css';
+import "@/styles/misclases/misclases.css";
 
 type Nico = {
   class_id: number;
@@ -47,18 +47,28 @@ export default function MisClases() {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const user = localStorage.getItem('user');
+        const user = localStorage.getItem("user");
         const userId = user ? JSON.parse(user).id : null;
 
-        const response = await fetch(`http://216.238.66.189:5000/getClasses?user_id=${userId}`);
+        const response = await fetch(
+          `http://216.238.66.189:5000/getClasses?user_id=${userId}`
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const data: Nico[] = await response.json();
         console.log("clases", data);
 
-        const upcoming = data.filter((clase) => new Date(clase.timestamp) >= new Date() && clase.path_video.trim() === "");
-        const past = data.filter((clase) => new Date(clase.timestamp) < new Date() || clase.path_video.trim() !== "");
+        const upcoming = data.filter(
+          (clase) =>
+            new Date(clase.timestamp) >= new Date() &&
+            clase.path_video.trim() === ""
+        );
+        const past = data.filter(
+          (clase) =>
+            new Date(clase.timestamp) < new Date() ||
+            clase.path_video.trim() !== ""
+        );
 
         setUpcomingClasses(upcoming);
         setPastClasses(past);
@@ -70,7 +80,13 @@ export default function MisClases() {
     fetchClasses();
   }, []);
 
-  const onClassClick = ({ class_id, course_name, teacher_name, timestamp, meeting_id }: Nico) => {
+  const onClassClick = ({
+    class_id,
+    course_name,
+    teacher_name,
+    timestamp,
+    meeting_id,
+  }: Nico) => {
     // Pre-class
     setModalClassId(class_id); // Set class_id
     setModalClassName(course_name);
@@ -80,7 +96,14 @@ export default function MisClases() {
     setOpenModal(true);
   };
 
-  const onPastClassClick = ({ class_id, course_name, teacher_name, timestamp, path_video, summary }: Nico) => {
+  const onPastClassClick = ({
+    class_id,
+    course_name,
+    teacher_name,
+    timestamp,
+    path_video,
+    summary,
+  }: Nico) => {
     // Post-class
     setModalClassId(class_id); // Set class_id
     setModalClassName(course_name);
@@ -152,6 +175,13 @@ export default function MisClases() {
               description={postClassDescription}
             />
           )}
+        </div>
+      </div>
+      <div className="myclassesRight">
+        <div className="myclasses-right-container">
+          <h3>Se parte del siguiente paso en la</h3>
+          <h2>Evolución Educativa</h2>
+          <button className="footerBtn">Registrate como maestro</button>
         </div>
       </div>
     </div>

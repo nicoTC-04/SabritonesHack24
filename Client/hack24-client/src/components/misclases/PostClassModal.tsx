@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Modal } from "../Modal";
 import '@/styles/misclases/PostClassModal.css';
 import toast from 'react-hot-toast';
+import ReactMarkdown from 'react-markdown';
 
 type PostClassModalProps = {
     toggleModal: Function;
@@ -35,7 +36,7 @@ const PostClassModal = ({
                     console.log(`Fetching video for class_id: ${classId}`);
                     // Fetch the video
                     const videoResponse = await fetch(`${apiUrl}/getVideo?class_id=${classId}`);
-                    
+
                     if (!videoResponse.ok) {
                         throw new Error('Failed to fetch video');
                     }
@@ -116,7 +117,7 @@ const PostClassModal = ({
                     </button>
                 </div>
                 <div className="modal-class-post-description">
-                    <p>{fetchedSummary}</p>
+                    <ReactMarkdown>{fetchedSummary}</ReactMarkdown>
                 </div>
             </div>
         </Modal>
