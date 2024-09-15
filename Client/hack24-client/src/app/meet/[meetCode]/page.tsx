@@ -178,67 +178,64 @@ const MeetingPage: React.FC = () => {
     });
   };
 
-  // const startRecording = () => {
-  //   console.log('Starting recording...');
-  //   const canvas = canvasRef.current;
-  //   if (!canvas) return;
-
-  //   drawStreamsOnCanvas();
-
-  //   // Capture video stream from canvas
-  //   const canvasStream = canvas.captureStream();
-  //   // Capture audio stream from the local stream
-  //   const audioStream = rtcHandler.current!.localStream;
-
-  //   // Combine both video and audio streams
-  //   const combinedStream = new MediaStream([...canvasStream.getTracks(), ...audioStream.getAudioTracks()]);
-
-  //   mediaRecorder.current = new MediaRecorder(combinedStream);
-  //   mediaRecorder.current.ondataavailable = (event) => {
-  //     if (event.data.size > 0) {
-  //       recordedChunks.current.push(event.data);
-  //     }
-  //   };
-
-  //   mediaRecorder.current.onstop = async () => {
-  //     console.log('Recording stopped. Uploading video...');
-  //     const blob = new Blob(recordedChunks.current, { type: 'video/webm' });
-  //     const formData = new FormData();
-  //     formData.append('video', blob, 'meeting_recording.webm');
-
-  //     try {
-  //       const response = await fetch(`${apiUrl}/api/upload-video`, {
-  //         method: 'POST',
-  //         body: formData,
-  //       });
-  //       if (!response.ok) {
-  //         throw new Error('Failed to upload video. Please try again.');
-  //       }
-  //       toast.success('Video recording uploaded successfully!');
-  //     } catch (error) {
-  //       console.error('Error uploading video:', error);
-  //       toast.error((error as Error).message);
-  //     }
-  //   };
-
-  //   mediaRecorder.current.start();
-  //   setRecording(true);
-  // };
-
-  // const stopRecording = () => {
-  //   console.log('Stopping recording...');
-  //   if (mediaRecorder.current) {
-  //     mediaRecorder.current.stop();
-  //     setRecording(false);
-  //   }
-  // };
-
   const startRecording = () => {
+    console.log('Starting recording...');
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+  
+    drawStreamsOnCanvas();
+  
+    // Capture video stream from canvas
+    const canvasStream = canvas.captureStream();
+    // Capture audio stream from the local stream
+    const audioStream = rtcHandler.current!.localStream;
+  
+    // Combine both video and audio streams
+    const combinedStream = new MediaStream([...canvasStream.getTracks(), ...audioStream.getAudioTracks()]);
+  
+    mediaRecorder.current = new MediaRecorder(combinedStream);
+    mediaRecorder.current.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        recordedChunks.current.push(event.data);
+      }
+    };
+  
+    mediaRecorder.current.onstop = async () => {
+      console.log('Recording stopped. Uploading video...');
+      const blob = new Blob(recordedChunks.current, { type: 'video/webm' });
+      const formData = new FormData();
+      formData.append('video', blob, 'meeting_recording.webm');
+      formData.append('meeting_id', meetingId as string); // Add the meeting ID to the form data
+  
+      try {
+        const response = await fetch(`${apiUrl}/api/upload-video`, {
+          method: 'POST',
+          body: formData,
+        });
+        if (!response.ok) {
+          throw new Error('Failed to upload video. Please try again.');
+        }
+        toast.success('Video recording uploaded successfully!');
+      } catch (error) {
+        console.error('Error uploading video:', error);
+        toast.error((error as Error).message);
+      }
+    };
+  
+    mediaRecorder.current.start();
     setRecording(true);
   };
+  
   const stopRecording = () => {
+    console.log('Stopping recording...');
+    if (mediaRecorder.current) {
+      mediaRecorder.current.stop();
       setRecording(false);
+      recordedChunks.current = []; // Clear recorded chunks after upload
+    }
   };
+  
+
 
   if (!username || !rtcHandler.current) {
     console.log('Username or RTCHandler is not available, returning null...');

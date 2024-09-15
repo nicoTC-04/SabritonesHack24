@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request # general flask imports
+from flask import Flask, jsonify, request, send_file # general flask imports
 from flask_socketio import SocketIO, emit, join_room, leave_room # socketio imports for webrtc
 from flask_cors import CORS # cors
 from server.webrtc import setup_webrtc # webrtc setup
@@ -189,7 +189,7 @@ def transcribe_audio(file_path):
     return transcription
 
 
-def convert_webm_to_mp3(input_file, output_file, timestamp):
+def convert_webm_to_mp3(input_file, output_file, timestamp, class_id):
     try:
         # Normalize the file paths to use forward slashes and ensure drive letters are properly formatted
         input_file = os.path.normpath(input_file).replace("\\", "/")
@@ -207,17 +207,38 @@ def convert_webm_to_mp3(input_file, output_file, timestamp):
 
         os.remove(output_file)
 
-        # Save transcription to a .txt file
+        # Generate summary from transcription
         summary = summarize_text(transcription)
+        Debugger.log_message('INFO', f'Summary: {summary}')
+
+        # Update the database with the new video path and summary
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        try:
+            # Update the path_video and summary fields in the Classes table
+            cursor.execute(sql.SQL("""
+                UPDATE my_schema.Classes
+                SET path_video = %s, summary = %s
+                WHERE id = %s
+            """), (input_file, summary, class_id))
+            conn.commit()
+            Debugger.log_message('INFO', f'Updated class {class_id} with video path and summary')
+        except psycopg2.Error as e:
+            conn.rollback()
+            Debugger.log_message('ERROR', f"Failed to update class: {str(e)}")
+        finally:
+            cursor.close()
+            conn.close()
+
+        # Save transcription summary to a .txt file
         with open(os.path.join(UPLOAD_FOLDER, f"summary_{timestamp}.txt"), 'w') as f:
             f.write(summary)
-
-        Debugger.log_message('INFO', f'Summary: {summary}')
 
     except subprocess.CalledProcessError as e:
         Debugger.log_message('ERROR', f"Failed to convert file: {str(e)}")
     except Exception as e:
         Debugger.log_message('ERROR', f"Unexpected error during conversion: {str(e)}")
+
 
 
 
@@ -228,6 +249,10 @@ def upload_file():
         return 'No file part', 400
 
     file = request.files['video']
+    meeting_id = request.form.get('meeting_id')
+
+    if not meeting_id:
+        return 'meeting_id is required', 400
 
     if file.filename == '':
         return 'No selected file', 400
@@ -240,6 +265,23 @@ def upload_file():
         file_path = os.path.join(UPLOAD_FOLDER, file_name)
 
         try:
+            # Connect to the database and get the class_id using meeting_id
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute(sql.SQL("""
+                SELECT id FROM my_schema.Classes WHERE meeting_id = %s
+            """), (meeting_id,))
+            class_record = cursor.fetchone()
+            
+            # If class is not found, return an error
+            if not class_record:
+                cursor.close()
+                conn.close()
+                return f"No class found for meeting_id: {meeting_id}", 404
+
+            # Extract the class_id
+            class_id = class_record[0]
+
             # Save the uploaded file
             file.save(file_path)
 
@@ -247,8 +289,8 @@ def upload_file():
             input_file = os.path.normpath(file_path).replace("\\", "/")
             output_mp3_file = os.path.normpath(os.path.join(UPLOAD_FOLDER, f"recording_{timestamp}.mp3")).replace("\\", "/")
 
-            # Start the MP3 conversion in a background thread
-            threading.Thread(target=convert_webm_to_mp3, args=(input_file, output_mp3_file, timestamp)).start()
+            # Start the MP3 conversion in a background thread, including class_id
+            threading.Thread(target=convert_webm_to_mp3, args=(input_file, output_mp3_file, timestamp, class_id)).start()
 
             # Return immediately after the file is uploaded
             return 'File uploaded successfully.', 200
@@ -256,7 +298,12 @@ def upload_file():
         except Exception as e:
             return f"Failed to upload file: {str(e)}", 500
 
+        finally:
+            cursor.close()
+            conn.close()
+
     return 'Invalid file type. Only video files are allowed.', 400
+
 
 
 
@@ -385,7 +432,6 @@ def get_categories():
     return jsonify(categories)
 
 
-# Make Appointment endpoint
 @app.route('/makeAppointment', methods=['POST'])
 def make_appointment():
     data = request.json
@@ -407,15 +453,22 @@ def make_appointment():
 
         Debugger.log_message('INFO', f'Meeting created with ID: {meeting_id} by student_id: {student_id}')
 
-        # Create an appointment in the Appointments table
+        # Update the appointment in the Appointments table
         cursor.execute(sql.SQL("""
-            INSERT INTO my_schema.Appointments (teacher_id, status, timestamp)
-            VALUES (
-                (SELECT teacher_id FROM my_schema.Courses WHERE course_id = %s), 
-                'Reserved', 
-                NOW()
-            )
+            UPDATE my_schema.Appointments
+            SET status = 'Reserved', 
+                timestamp = NOW()
+            WHERE teacher_id = (
+                SELECT teacher_id 
+                FROM my_schema.Courses 
+                WHERE course_id = %s
+            ) AND status != 'Reserved' -- Optional condition to avoid updating already reserved appointments
         """), (course_id,))
+        
+        # Check if the appointment was actually updated
+        if cursor.rowcount == 0:
+            return jsonify({'error': 'No matching appointment found to update'}), 404
+        
         conn.commit()
 
         # Insert into the Classes table
@@ -434,6 +487,7 @@ def make_appointment():
         cursor.close()
         conn.close()
         return jsonify({'error': str(e)}), 500
+
 
 
 
@@ -492,6 +546,47 @@ def get_classes():
 
     return jsonify(classes)
 
+
+# endpoint to get the video file for a class
+@app.route('/getVideo', methods=['GET'])
+def get_video():
+    class_id = request.args.get('class_id')
+
+    if not class_id:
+        return jsonify({'error': 'class_id is required'}), 400
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        # Fetch the path_video for the given class_id
+        cursor.execute(sql.SQL("""
+            SELECT path_video
+            FROM my_schema.Classes
+            WHERE id = %s
+        """), (class_id,))
+        result = cursor.fetchone()
+        
+        if not result or not result[0] or result[0].strip() == "":
+            return jsonify({'error': 'Video not found or path is empty for this class'}), 404
+        
+        # Construct the file path
+        video_path = os.path.join(UPLOAD_FOLDER, result[0])
+        
+        if not os.path.exists(video_path):
+            return jsonify({'error': 'Video file does not exist on the server'}), 404
+
+        # Send the video file
+        return send_file(video_path, as_attachment=True)
+    
+    except psycopg2.Error as e:
+        Debugger.log_message('ERROR', f"Failed to fetch video: {str(e)}")
+        return jsonify({'error': 'Failed to retrieve video'}), 500
+    
+    finally:
+        cursor.close()
+        conn.close()
+
+    
 
 
 
