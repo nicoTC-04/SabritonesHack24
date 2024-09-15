@@ -13,6 +13,7 @@ interface Appointment {
 
 interface Course {
   appointments: Appointment[];
+  category_id: number;
   course_description: string;
   course_id: number;
   course_name: string;
@@ -23,28 +24,50 @@ interface Course {
   teacher_rating: string;
 }
 
+interface Category {
+  category_id: number;
+  category_name: string;
+}
+
 export default function Home() {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const mathCarouselRef = useRef<HTMLDivElement>(null);
   const englishCarouselRef = useRef<HTMLDivElement>(null);
   const historyCarouselRef = useRef<HTMLDivElement>(null);
   const programmingCarouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetch("http://216.238.66.189:5000/getCourses")
-      .then((response) => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("http://216.238.66.189:5000/getCourses");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        return response.json();
-      })
-      .then((data) => {
+        const data = await response.json();
         console.log(data);
         setCourses(data);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("There was an error fetching the courses!", error);
-      });
+      }
+    };
+
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("http://216.238.66.189:5000/getCategories");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log(data);
+        setCategories(data);
+      } catch (error) {
+        console.error("There was an error fetching the categories!", error);
+      }
+    };
+
+    fetchCourses();
+    fetchCategories();
   }, []);
 
   const scrollLeft = (carouselRef: React.RefObject<HTMLDivElement>) => {
@@ -60,17 +83,17 @@ export default function Home() {
   };
 
   // Filtered courses by category
-  const mathCourses = courses.filter((course) => course.course_name.includes("Matemáticas"));
-  const englishCourses = courses.filter((course) => course.course_name.includes("Español"));
-  const historyCourses = courses.filter((course) => course.course_name.includes("Historia"));
-  const programmingCourses = courses.filter((course) => course.course_name.includes("Computación"));
+  const mathCourses = courses.filter((course) => course.category_id === 1);
+  const englishCourses = courses.filter((course) => course.category_id === 3);
+  const historyCourses = courses.filter((course) => course.category_id === 5);
+  const programmingCourses = courses.filter((course) => course.category_id === 4);
 
   return (
-    <div>
+    <div className="landingContainer">
       <div className="Banner">
         <h1 className="header">Encuentra a tu nuevo Profesor</h1>
       </div>
-      <div className="CenteredContainer">
+      <div className="searchContainer">
         <SearchBar />
       </div>
 
@@ -96,7 +119,7 @@ export default function Home() {
 
         <div>
           <div className="leftContainer">
-            <h3>Español</h3>
+            <h3>Ingles</h3>
           </div>
           <div className="carousel-container">
             <button className="carousel-button left" onClick={() => scrollLeft(englishCarouselRef)}>

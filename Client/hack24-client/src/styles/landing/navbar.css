@@ -13,9 +13,10 @@
 .navItem_name {
   display: flex;
   align-self: center;
-  font-family: istok-web;
   font-size: 2rem;
   color: var(--accent);
+  font-style:italic;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 }
 
 .navItem {

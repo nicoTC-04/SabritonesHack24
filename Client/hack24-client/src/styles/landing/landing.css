@@ -1,3 +1,7 @@
+.landingContainer{
+  background: var(--background);
+}
+
 .Banner {
   display: flex;
   align-items: center;
@@ -7,6 +11,17 @@
 .header {
   margin-top: 10rem;
   font-size: 2.5rem;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+
+}
+.searchContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 2rem;
+  font-size: 2rem;
+ margin-bottom: 10rem;
 }
 
 .CenteredContainer {
