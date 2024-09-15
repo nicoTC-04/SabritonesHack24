@@ -3,7 +3,7 @@
 import toast from 'react-hot-toast';
 import { Socket } from 'socket.io-client';
 
-const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const apiUrl = process.env.REACT_APP_API_URL || 'http://216.238.66.189:5000';
 
 type PeerConnections = {
   [key: string]: RTCPeerConnection;

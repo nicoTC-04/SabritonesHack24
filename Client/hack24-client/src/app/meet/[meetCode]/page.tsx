@@ -8,7 +8,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 import './page.css';
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://216.238.66.189:5000';
 
 const MeetingPage: React.FC = () => {
   const router = useRouter();
@@ -44,7 +44,7 @@ const MeetingPage: React.FC = () => {
     const username = query.get('username');
 
     console.log(`Extracted meeting_id: ${meeting_id}, username: ${username}`);
-    
+
     if (meeting_id && username) {
       setMeetingId(meeting_id);
       setUsername(username);
@@ -238,14 +238,14 @@ const MeetingPage: React.FC = () => {
 
   const VideoElement: React.FC<{ stream: MediaStream; muted: boolean; peerName: string; isVideoOff: boolean }> = ({ stream, muted, peerName, isVideoOff }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
-  
+
     useEffect(() => {
       console.log(`Setting video stream for ${peerName}...`);
       if (videoRef.current && stream) {
         videoRef.current.srcObject = stream;
       }
     }, [stream]);
-  
+
     return (
       <div className={`video-container ${isVideoOff ? 'video-off' : ''}`}>
         <video ref={videoRef} autoPlay playsInline muted={muted} className="video-element" />
@@ -253,7 +253,7 @@ const MeetingPage: React.FC = () => {
       </div>
     );
   };
-  
+
 
   return (
     <div className="container">
