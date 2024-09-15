@@ -5,45 +5,34 @@ import { useState } from 'react';
 import '@/styles/misclases/StudentClass.css'
 
 type StudentClassProps = {
-    student: {
-        name: string;
-        professor: string;
-        fecha: string;
-        hora: string;
-    };
+    name: string;
+    professor: string;
+    fecha: string;
+    hora: string;
+    toggleModal: Function;
 };
 
-const StudentClass = ({ student }: StudentClassProps) => {
+const StudentClass = ({ name, professor, fecha, hora, toggleModal }: StudentClassProps) => {
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    
-    const handleCardClick = () => {
-        setIsModalOpen(true);
-      };
-    const handleCloseModal = () => {
-    setIsModalOpen(false);
-    };
+    const toggleModalHandler = () => {
+        toggleModal();
+    }
 
     return (
-        <div className='student-class-card' onClick={handleCardClick}>
+        <div className='student-class-card' onClick={toggleModalHandler}>
             <div className='student-class-name-container'>
-                <p>{student.name}</p>
+                <p>{name}</p>
             </div>
             <div className='student-teacher-name-container'>
                 <p>Professor:&nbsp;</p>
-                <p style={{fontWeight: 'bold'}}>{student.professor}</p>
+                <p style={{fontWeight: 'bold'}}>{professor}</p>
             </div>
             <div className='student-date-container'>
-                <p>{student.fecha}: {student.hora}</p>
+                <p>{fecha}: {hora}</p>
             </div>
-
         </div>
-
-        /* Modal despues */
-
-        
-
     );
 };
 
 export default StudentClass;
+
