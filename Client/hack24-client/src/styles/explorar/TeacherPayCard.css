@@ -1,0 +1,158 @@
+.teacher-pay-main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 20vw;
+  height: 40vh;
+  border-radius: 1vw;
+  box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.2);
+}
+
+.teacher-pay-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 35%;
+}
+
+.teacher-pay-image {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 1vw 1vw 0 0;
+}
+
+.teacher-pay-details-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 65%;
+  padding: 1vh 0.5vw;
+}
+
+.teacher-pay-info-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 70%;
+}
+
+.teacher-pay-basic-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 70%;
+}
+
+.teacher-pay-name-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 40%;
+}
+
+.teacher-pay-name {
+  font-size: 1.1vw;
+  font-weight: bold;
+}
+
+.teacher-pay-score {
+  font-size: 1vw;
+  font-weight: bold;
+}
+
+.teacher-pay-name-name-container {
+  display: flex;
+  width: 55%;
+  height: 100%;
+  align-items: center;
+}
+
+.teacher-pay-rating {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 45%;
+  height: 100%;
+}
+
+.teacher-pay-description-container {
+  width: 100%;
+  padding-right: 1vw;
+}
+
+.teacher-pay-description {
+  font-size: 0.8vw;
+  text-align: left;
+  margin: 0;
+  color: gray;
+}
+
+.teacher-pay-cat-grad-container {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  height: 100%;
+  justify-content: center;
+}
+
+.teacher-pay-details-text-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 35%;
+  gap: 0.5vw;
+  padding-left: 1vw;
+}
+
+.teacher-pay-details-text-label {
+  font-size: 0.85vw;
+  font-weight: bold;
+}
+
+.teacher-pay-details-text-value {
+  font-size: 0.85vw;
+}
+
+.teacher-pay-order-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 30%;
+}
+
+.teacher-pay-button-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding-left: 1vw;
+}
+
+.teacher-pay-button {
+  width: 60%;
+  background-color: lightgray;
+  height: 80%;
+  border-radius: 1vw;
+  font-weight: bold;
+  font-size: 0.95vw;
+  transition: opacity 0.3s ease;
+}
+
+.teacher-pay-button:hover {
+  opacity: 0.8;
+}
+
+.teacher-pay-price {
+  font-size: 1.5vw;
+}
