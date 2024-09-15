@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --background: #e4e4e4;
+  --background: #e4e2e2;
   --foreground: #171717;
   --primary: #252424;
   --secondary: #efefef;
   --accent: #f6c74f;
-  --teacher-image-background-default: #e5e6e7;
+  --teacher-image-background-default: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
