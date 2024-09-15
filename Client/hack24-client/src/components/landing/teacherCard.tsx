@@ -3,18 +3,22 @@
 import "@/styles/landing/teacherCard.css";
 import StarRatingDisplay from "./StarRatingDisplay";
 
-type TeacherCardProps = {
-  teacher: {
-    name: string;
-    image: string;
-    category: string;
-    grade: string;
-    score: number;
-  };
-};
+interface Course {
+  appointments: number[];
+  course_id: number;
+  level: string;
+  name: string;
+  pathtopic: string;
+  rating: string;
+  user_id: number;
+}
 
-const TeacherCard = ({ teacher }: TeacherCardProps) => {
-  const imageTeacherErrorHandler = (
+interface CourseCardProps {
+  course: Course;
+}
+
+const CourseCard = ({ course }: CourseCardProps) => {
+  const imageCourseErrorHandler = (
     event: React.SyntheticEvent<HTMLImageElement>
   ) => {
     event.currentTarget.src =
@@ -25,33 +29,31 @@ const TeacherCard = ({ teacher }: TeacherCardProps) => {
     <div className="teacher-card-main-container">
       <div className="teacher-card-image-container">
         <img
-          src={teacher.image}
+          src={course.pathtopic}
           className="teacher-card-image"
-          onError={imageTeacherErrorHandler}
+          onError={imageCourseErrorHandler}
         />
       </div>
       <div className="teacher-card-description-container">
         <div className="teacher-card-name-stars-container">
-          <p className="teacher-card-name">{teacher.name}</p>
+          <p className="teacher-card-name">{course.name}</p>
           <div>
-            <StarRatingDisplay rating={teacher.score} />
+            <StarRatingDisplay rating={parseFloat(course.rating)} />
           </div>
         </div>
         <div className="teacher-card-teacher-details-container">
           <div className="teacher-card-details-container">
             <div className="teacher-card-details-text-container">
-              <p className="teacher-card-details-text-label">Categoria:</p>
-              <p className="teacher-card-details-text-value">
-                {teacher.category}
-              </p>
+              <p className="teacher-card-details-text-label">Nivel:</p>
+              <p className="teacher-card-details-text-value">{course.level}</p>
             </div>
             <div className="teacher-card-details-text-container">
-              <p className="teacher-card-details-text-label">Grado:</p>
-              <p className="teacher-card-details-text-value">{teacher.grade}</p>
+              <p className="teacher-card-details-text-label">ID del Curso:</p>
+              <p className="teacher-card-details-text-value">{course.course_id}</p>
             </div>
           </div>
           <div className="teacher-card-score-container">
-            <p>{teacher.score}</p>
+            <p>{course.rating}</p>
           </div>
         </div>
       </div>
@@ -59,4 +61,4 @@ const TeacherCard = ({ teacher }: TeacherCardProps) => {
   );
 };
 
-export default TeacherCard;
+export default CourseCard;
