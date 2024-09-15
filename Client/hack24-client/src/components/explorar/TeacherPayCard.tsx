@@ -3,6 +3,26 @@
 import "@/styles/explorar/TeacherPayCard.css";
 import StarRatingDisplay from "../landing/StarRatingDisplay";
 
+type Appointment = {
+  appointment_id: number;
+  appointment_timestamp: string;
+  status: string;
+};
+
+type CardFetch = {
+  appointments: Appointment[];
+  category_id: number;
+  category_name: string;
+  course_id: number;
+  course_description: string;
+  level: string;
+  course_name: string;
+  pathtopic: string;
+  teacher_id: number;
+  teacher_name: string;
+  teacher_rating: string;
+};
+
 type TeacherPayCardProps = {
   image: string;
   name: string;
@@ -13,6 +33,7 @@ type TeacherPayCardProps = {
   price: number;
   professorName: string;
   toggleModal: Function;
+  course: CardFetch;
 };
 
 const TeacherPayCard = ({
@@ -25,6 +46,7 @@ const TeacherPayCard = ({
   price,
   professorName,
   toggleModal,
+  course,
 }: TeacherPayCardProps) => {
   const imagePayErrorHandler = (
     event: React.SyntheticEvent<HTMLImageElement>
@@ -35,10 +57,8 @@ const TeacherPayCard = ({
 
   const toggleModalHandler = () => {
     toggleModal({
-      name,
-      description,
       price,
-      professorName,
+      course,
     });
   };
 

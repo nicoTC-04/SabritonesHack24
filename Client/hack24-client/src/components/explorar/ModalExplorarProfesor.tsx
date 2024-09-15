@@ -2,23 +2,39 @@
 
 import { useState } from "react";
 import { Modal } from "../Modal";
-import { IoIosCheckmarkCircle } from "react-icons/io";
 import "@/styles/Explorar/ModalExplorarProfesor.css";
+import ModalExplorarRegistro from "./ModalExplorarRegistro";
 
 type ModalExplorarProfesorProps = {
-  name: string;
-  description: string;
   price: number;
   toggleModal: Function;
-  professorName: string;
+  datosCurso?: CardFetch;
+};
+
+type Appointment = {
+  appointment_id: number;
+  appointment_timestamp: string;
+  status: string;
+};
+
+type CardFetch = {
+  appointments: Appointment[];
+  category_id: number;
+  category_name: string;
+  course_id: number;
+  course_description: string;
+  level: string;
+  course_name: string;
+  pathtopic: string;
+  teacher_id: number;
+  teacher_name: string;
+  teacher_rating: string;
 };
 
 const ModalExplorarProfesor = ({
-  name,
-  description,
   price,
   toggleModal,
-  professorName,
+  datosCurso,
 }: ModalExplorarProfesorProps) => {
   const imageModalProfesorErrorHandler = (
     event: React.SyntheticEvent<HTMLImageElement>
@@ -27,11 +43,10 @@ const ModalExplorarProfesor = ({
       "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
   };
 
-  const CHECKMARK_ICON_SIZE = 100;
-  const [openSubmitted, setOpenSubmitted] = useState(false);
+  const [openRegister, setOpenRegister] = useState(false);
 
   const onClickRegistrar = () => {
-    setOpenSubmitted(true);
+    setOpenRegister(true);
   };
 
   const onClickCerrar = () => {
@@ -44,13 +59,17 @@ const ModalExplorarProfesor = ({
         <div className="modal-explorar-clase-datos-container">
           <div className="modal-explorar-clase-details-container">
             <div className="modal-explorar-clase-basic-info-container">
-              <p className="modal-explorar-clase-name">{name}</p>
+              <p className="modal-explorar-clase-name">
+                {datosCurso?.course_name}
+              </p>
             </div>
             <div>
               <p className="modal-explorar-clase-description-label">
                 Descripcion
               </p>
-              <p className="modal-explorar-clase-description">{description}</p>
+              <p className="modal-explorar-clase-description">
+                {datosCurso?.course_description}
+              </p>
             </div>
           </div>
           <div className="modal-explorar-clase-image-container-container">
@@ -61,7 +80,7 @@ const ModalExplorarProfesor = ({
                 onError={imageModalProfesorErrorHandler}
               />
               <p className="modal-explorar-clase-professor-name">
-                Prof. {professorName}
+                Prof. {datosCurso?.teacher_name}
               </p>
             </div>
           </div>
@@ -76,23 +95,12 @@ const ModalExplorarProfesor = ({
           <p className="modal-explorar-clase-price">${price}/hr</p>
         </div>
       </div>
-      {openSubmitted && (
-        <Modal width={25} height={30} modalToggle={toggleModal}>
-          <div className="modal-registered-main-container">
-            <div className="modal-registered-container">
-              <IoIosCheckmarkCircle
-                className="modal-registered-icon"
-                size={CHECKMARK_ICON_SIZE}
-              />
-              <p className="modal-registered-text">
-                Has sido correctamente registrado
-              </p>
-            </div>
-            <button className="modal-registered-close" onClick={onClickCerrar}>
-              Cerrar
-            </button>
-          </div>
-        </Modal>
+      {openRegister && (
+        <ModalExplorarRegistro
+          curso_id={datosCurso?.course_id}
+          appointments={datosCurso?.appointments}
+          toggleModal={onClickCerrar}
+        />
       )}
     </Modal>
   );

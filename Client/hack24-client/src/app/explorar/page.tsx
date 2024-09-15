@@ -5,136 +5,85 @@ import { useEffect, useState } from "react";
 import ModalExplorarProfesor from "@/components/explorar/ModalExplorarProfesor";
 import FormFilter from "@/components/explorar/filter/FormFilter";
 import "@/styles/explorar/Explorar.css";
-
-const arrayTest = [
-  {
-    className: "Curso de Algebra Lineal",
-    description:
-      "Ofrezco material al alumno para que aprenda de una manera eficiente y podamos tener un buen vinculo alumno maestro",
-    price: 200,
-    professorName: "Emilio Dominguez",
-    category: "Matematicas",
-    grade: "Profesional",
-    rating: 4.5,
-  },
-  {
-    className: "Fisica",
-    description:
-      "Ofrezco material al alumno para que aprenda de una manera eficiente y podamos tener un buen vinculo alumno maestro",
-    price: 200,
-    professorName: "Emilio Dominguez",
-    category: "Ciencias",
-    grade: "Secundaria",
-    rating: 4.0,
-  },
-  {
-    className: "Quimica",
-    description:
-      "Proporciono recursos y guías para que el alumno comprenda los conceptos fundamentales de la química",
-    price: 250,
-    professorName: "Laura Martinez",
-    category: "Ciencias",
-    grade: "Secundaria",
-    rating: 4.2,
-  },
-  {
-    className: "Historia",
-    description:
-      "Enseño historia de una manera interactiva y dinámica para que el alumno se interese por el pasado",
-    price: 180,
-    professorName: "Carlos Perez",
-    category: "Humanidades",
-    grade: "Secundaria",
-    rating: 3.8,
-  },
-  {
-    className: "Ingles",
-    description:
-      "Clases de inglés con enfoque en conversación y comprensión auditiva para mejorar la fluidez del alumno",
-    price: 220,
-    professorName: "Ana Gonzalez",
-    category: "Idiomas",
-    grade: "Secundaria",
-    rating: 4.7,
-  },
-  {
-    className: "Programación",
-    description:
-      "Curso de programación desde cero, abarcando los conceptos básicos hasta avanzados con proyectos prácticos",
-    price: 300,
-    professorName: "Juan Rodriguez",
-    category: "Tecnología",
-    grade: "Profesional",
-    rating: 4.9,
-  },
-  {
-    className: "Historia",
-    description:
-      "Enseño historia de una manera interactiva y dinámica para que el alumno se interese por el pasado",
-    price: 180,
-    professorName: "Carlos Perez",
-    category: "Humanidades",
-    grade: "Secundaria",
-    rating: 3.8,
-  },
-  {
-    className: "Ingles",
-    description:
-      "Clases de inglés con enfoque en conversación y comprensión auditiva para mejorar la fluidez del alumno",
-    price: 220,
-    professorName: "Ana Gonzalez",
-    category: "Idiomas",
-    grade: "Secundaria",
-    rating: 4.7,
-  },
-  {
-    className: "Programación",
-    description:
-      "Curso de programación desde cero, abarcando los conceptos básicos hasta avanzados con proyectos prácticos",
-    price: 300,
-    professorName: "Juan Rodriguez",
-    category: "Tecnología",
-    grade: "Profesional",
-    rating: 4.9,
-  },
-];
+import axios from "axios";
+import { API_BASE_URL } from "../constants";
 
 const description =
   "Ofrezco material al alumno para que aprenda de una manera eficiente y podamos tener un buen vinculo alumno maestro";
 
-const categorias = [
-  "Matematicas",
-  "Fisica",
-  "Quimica",
-  "Biologia",
-  "Historia",
-  "Geografia",
-  "Español",
-];
+const grados = ["Avanzado", "Intermedio", "Principiante"];
 
-const grados = ["Primaria", "Secundaria", "Preparatoria", "Profesional"];
+type Appointment = {
+  appointment_id: number;
+  appointment_timestamp: string;
+  status: string;
+};
+
+type CardFetch = {
+  appointments: Appointment[];
+  category_id: number;
+  category_name: string;
+  course_id: number;
+  course_description: string;
+  level: string;
+  course_name: string;
+  pathtopic: string;
+  teacher_id: number;
+  teacher_name: string;
+  teacher_rating: string;
+};
 
 type Course = {
-  name: string;
-  description: string;
   price: number;
-  professorName: string;
+  course: CardFetch;
+};
+
+type Category = {
+  id: number;
+  name: string;
+};
+
+const getRandomPrice = () => {
+  return Math.floor(Math.random() * (400 - 100 + 1)) + 100;
 };
 
 export default function Explorar() {
   const [openModal, setOpenModal] = useState(false);
 
-  const [modalClassName, setModalClassName] = useState("Matematicas");
-  const [modalDescription, setModalDescription] = useState(description);
-  const [modalProfessorName, setModalProfessorName] =
-    useState("Emilio Dominguez");
   const [modalPrice, setModalPrice] = useState(200);
+  const [modalCourseData, setModalCourseData] = useState<CardFetch>();
 
   const [categories, setCategories] = useState<string[]>([]);
+  const [categoriesID, setCategoriesID] = useState<Category[]>([]);
   const [grades, setGrades] = useState<string[]>([]);
+  const [courses, setCourses] = useState<CardFetch[]>([]);
 
   useEffect(() => {
-    setCategories(categorias);
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/getCategories`);
+        const categoryIDs = response.data;
+        const categoryNames = response.data.map(
+          (category: { name: string }) => category.name
+        );
+        setCategoriesID(categoryIDs);
+        setCategories(categoryNames);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/getCourses`);
+        setCourses(response.data);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    fetchCourses();
+    fetchCategories();
     setGrades(grados);
   }, []);
 
@@ -149,16 +98,9 @@ export default function Explorar() {
     setFilteredGrade(filteredGrade);
   };
 
-  const onClickMoreInfo = ({
-    name,
-    description,
-    price,
-    professorName,
-  }: Course) => {
-    setModalClassName(name);
-    setModalDescription(description);
+  const onClickMoreInfo = ({ course, price }: Course) => {
     setModalPrice(price);
-    setModalProfessorName(professorName);
+    setModalCourseData(course);
     toggleModalHandler();
   };
 
@@ -176,33 +118,45 @@ export default function Explorar() {
         />
       </div>
       <div className="explorar-cards-container">
-        {arrayTest
-        .filter((course) => 
-          (filteredCategory.length === 0 || filteredCategory.includes(course.category)) &&
-          (filteredGrade.length === 0 || filteredGrade.includes(course.grade))
-        )
-        .map((course, index) => (
-          <TeacherPayCard
-            key={index}
-            name={course.className}
-            image="aaa.jpg"
-            rating={course.rating}
-            description={course.description}
-            category={course.category}
-            grade={course.grade}
-            price={course.price}
-            professorName={course.professorName}
-            toggleModal={onClickMoreInfo}
-          />
-        ))}
+        {courses
+          .filter((course) => {
+            const selectedCategoryIDs = filteredCategory.map(
+              (name) =>
+                categoriesID.find((category) => category.name === name)?.id
+            );
+
+            return (
+              (filteredCategory.length === 0 ||
+                selectedCategoryIDs.includes(course.category_id)) &&
+              (filteredGrade.length === 0 ||
+                filteredGrade.includes(course.level))
+            );
+          })
+          .map((course, index) => (
+            <TeacherPayCard
+              key={index}
+              name={course.course_name}
+              image={course.pathtopic}
+              rating={parseFloat(course.teacher_rating)}
+              description={course.course_description}
+              category={
+                categoriesID.find(
+                  (category) => category.id === course.category_id
+                )?.name || "Unknown"
+              }
+              grade={course.level}
+              price={getRandomPrice()}
+              professorName={course.teacher_name}
+              course={course}
+              toggleModal={onClickMoreInfo}
+            />
+          ))}
       </div>
       {openModal && (
         <ModalExplorarProfesor
-          name={modalClassName}
-          description={modalDescription}
           price={modalPrice}
-          professorName={modalProfessorName}
           toggleModal={toggleModalHandler}
+          datosCurso={modalCourseData}
         />
       )}
     </div>
