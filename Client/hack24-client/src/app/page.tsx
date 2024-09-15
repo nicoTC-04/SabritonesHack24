@@ -4,6 +4,7 @@ import SearchBar from "../components/landing/searchbar";
 import "./../styles/landing/landing.css";
 import TeacherCard from "@/components/landing/teacherCard";
 import RatingCard from "@/components/landing/RatingCard";
+//import UniPic from "./Uni.jpg"
 
 interface Appointment {
   appointment_id: number;
@@ -54,7 +55,9 @@ export default function Home() {
 
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://216.238.66.189:5000/getCategories");
+        const response = await fetch(
+          "http://216.238.66.189:5000/getCategories"
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -86,15 +89,19 @@ export default function Home() {
   const mathCourses = courses.filter((course) => course.category_id === 1);
   const englishCourses = courses.filter((course) => course.category_id === 3);
   const historyCourses = courses.filter((course) => course.category_id === 5);
-  const programmingCourses = courses.filter((course) => course.category_id === 4);
+  const programmingCourses = courses.filter(
+    (course) => course.category_id === 4
+  );
 
   return (
     <div className="landingContainer">
-      <div className="Banner">
-        <h1 className="header">Encuentra a tu nuevo Profesor</h1>
-      </div>
-      <div className="searchContainer">
-        <SearchBar />
+      <div className="landingHeader">
+        <div className="landingHeaderContent">
+          <h1 className="header">Encuentra a tu nuevo Profesor</h1>
+          <div className="searchContainer">
+            <SearchBar />
+          </div>
+        </div>
       </div>
 
       <div>
@@ -103,7 +110,10 @@ export default function Home() {
             <h3>Matemáticas</h3>
           </div>
           <div className="carousel-container">
-            <button className="carousel-button left" onClick={() => scrollLeft(mathCarouselRef)}>
+            <button
+              className="carousel-button left"
+              onClick={() => scrollLeft(mathCarouselRef)}
+            >
               &#9664;
             </button>
             <div className="carousel" ref={mathCarouselRef}>
@@ -111,7 +121,10 @@ export default function Home() {
                 <TeacherCard key={course.course_id} course={course} />
               ))}
             </div>
-            <button className="carousel-button right" onClick={() => scrollRight(mathCarouselRef)}>
+            <button
+              className="carousel-button right"
+              onClick={() => scrollRight(mathCarouselRef)}
+            >
               &#9654;
             </button>
           </div>
@@ -122,7 +135,10 @@ export default function Home() {
             <h3>Ingles</h3>
           </div>
           <div className="carousel-container">
-            <button className="carousel-button left" onClick={() => scrollLeft(englishCarouselRef)}>
+            <button
+              className="carousel-button left"
+              onClick={() => scrollLeft(englishCarouselRef)}
+            >
               &#9664;
             </button>
             <div className="carousel" ref={englishCarouselRef}>
@@ -130,7 +146,10 @@ export default function Home() {
                 <TeacherCard key={course.course_id} course={course} />
               ))}
             </div>
-            <button className="carousel-button right" onClick={() => scrollRight(englishCarouselRef)}>
+            <button
+              className="carousel-button right"
+              onClick={() => scrollRight(englishCarouselRef)}
+            >
               &#9654;
             </button>
           </div>
@@ -172,7 +191,10 @@ export default function Home() {
             <h3>Historia</h3>
           </div>
           <div className="carousel-container">
-            <button className="carousel-button left" onClick={() => scrollLeft(historyCarouselRef)}>
+            <button
+              className="carousel-button left"
+              onClick={() => scrollLeft(historyCarouselRef)}
+            >
               &#9664;
             </button>
             <div className="carousel" ref={historyCarouselRef}>
@@ -180,7 +202,10 @@ export default function Home() {
                 <TeacherCard key={course.course_id} course={course} />
               ))}
             </div>
-            <button className="carousel-button right" onClick={() => scrollRight(historyCarouselRef)}>
+            <button
+              className="carousel-button right"
+              onClick={() => scrollRight(historyCarouselRef)}
+            >
               &#9654;
             </button>
           </div>
@@ -191,7 +216,10 @@ export default function Home() {
             <h3>Programación</h3>
           </div>
           <div className="carousel-container">
-            <button className="carousel-button left" onClick={() => scrollLeft(programmingCarouselRef)}>
+            <button
+              className="carousel-button left"
+              onClick={() => scrollLeft(programmingCarouselRef)}
+            >
               &#9664;
             </button>
             <div className="carousel" ref={programmingCarouselRef}>
@@ -199,7 +227,10 @@ export default function Home() {
                 <TeacherCard key={course.course_id} course={course} />
               ))}
             </div>
-            <button className="carousel-button right" onClick={() => scrollRight(programmingCarouselRef)}>
+            <button
+              className="carousel-button right"
+              onClick={() => scrollRight(programmingCarouselRef)}
+            >
               &#9654;
             </button>
           </div>
