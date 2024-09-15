@@ -59,3 +59,14 @@
     height: 100%;
     width: 90%;
 }
+
+.download-button {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    margin-left: 1.5rem;
+    background-color: var(--accent);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}

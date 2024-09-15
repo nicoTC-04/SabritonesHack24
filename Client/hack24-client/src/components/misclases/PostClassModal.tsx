@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 
 type PostClassModalProps = {
     toggleModal: Function;
-    classId: number | null; // Add classId to props
+    classId: number | null;
     videoUrl: string;
     nombre: string;
     professor: string;
@@ -16,22 +16,23 @@ type PostClassModalProps = {
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://216.238.66.189:5000';
 
 const PostClassModal = ({
-    classId, // Include classId in destructuring
-    nombre, 
-    professor, 
-    date, 
-    videoUrl, 
-    description, 
-    toggleModal 
+    classId,
+    nombre,
+    professor,
+    date,
+    videoUrl,
+    description,
+    toggleModal
 }: PostClassModalProps) => {
-    const [fetchedVideoUrl, setFetchedVideoUrl] = useState<string>(videoUrl);
     const [fetchedSummary, setFetchedSummary] = useState<string>(description);
+    const [videoBlob, setVideoBlob] = useState<Blob | null>(null); // Store the video blob for downloading
 
     // Fetch video and summary when the modal opens
     useEffect(() => {
         if (classId) {
             const fetchVideoAndSummary = async () => {
                 try {
+                    console.log(`Fetching video for class_id: ${classId}`);
                     // Fetch the video
                     const videoResponse = await fetch(`${apiUrl}/getVideo?class_id=${classId}`);
                     
@@ -40,10 +41,11 @@ const PostClassModal = ({
                     }
 
                     const videoBlob = await videoResponse.blob();
-                    const videoUrl = URL.createObjectURL(videoBlob);
-                    setFetchedVideoUrl(videoUrl);
+                    console.log('Video blob received:', videoBlob);
+                    setVideoBlob(videoBlob); // Save the blob for downloading
 
                     // Fetch the summary
+                    console.log(`Fetching summary for class_id: ${classId}`);
                     const summaryResponse = await fetch(`${apiUrl}/getSummary?class_id=${classId}`);
 
                     if (!summaryResponse.ok) {
@@ -52,6 +54,7 @@ const PostClassModal = ({
 
                     const summaryData = await summaryResponse.json();
                     const summary = summaryData.summary || 'No summary available';
+                    console.log('Summary received:', summary);
                     setFetchedSummary(summary);
 
                 } catch (error) {
@@ -63,6 +66,19 @@ const PostClassModal = ({
             fetchVideoAndSummary();
         }
     }, [classId]);
+
+    const handleDownload = () => {
+        if (videoBlob) {
+            const downloadUrl = URL.createObjectURL(videoBlob);
+            const a = document.createElement('a');
+            a.href = downloadUrl;
+            a.download = 'video.webm'; // You can change the filename as needed
+            a.click();
+            URL.revokeObjectURL(downloadUrl); // Clean up the URL object
+        } else {
+            toast.error('Video not available for download');
+        }
+    };
 
     const imageModalProfesorErrorHandler = (
         event: React.SyntheticEvent<HTMLImageElement>
@@ -94,11 +110,10 @@ const PostClassModal = ({
                         />
                     </div>
                 </div>
-                <div className="modal-class-post-video">
-                    <video controls>
-                        <source src={fetchedVideoUrl} type="video/webm" />
-                        Your browser does not support the video tag.
-                    </video>
+                <div className="modal-class-post-download">
+                    <button onClick={handleDownload} className="download-button">
+                        Download Video
+                    </button>
                 </div>
                 <div className="modal-class-post-description">
                     <p>{fetchedSummary}</p>
